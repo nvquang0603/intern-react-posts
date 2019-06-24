@@ -29,7 +29,7 @@ function AppRouter() {
                 </nav>
 
                 <Route path={"/"} exact component={Index}/>
-                <Route path={"/about"} component={About}/>
+                <Route path={"/about/"} component={About}/>
                 <Route path={"/user"} component={User}/>
             </div>
         </Router>

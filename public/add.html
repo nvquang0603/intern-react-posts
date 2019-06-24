@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../src/index.css">
+    <link rel="stylesheet" type="text/css" href="../src/sb-admin-2.css">
+</head>
+
+<body>
+    <div class="row p-5 d-flex justify-content-center align-items-center bg-gradient-primary">
+        <header>
+            <h1 class="text-center text-white">POST MANAGEMENT</h1>
+        </header>
+    </div>
+    <section class="row">
+        <aside class="col-2">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/post">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Post List</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/post/add">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Add Post</span></a>
+                </li>
+            </ul>
+        </aside>
+        <main class="col-10 p-5">
+            <h2 class="text-center">CREATE NEW POST</h2>
+            <form>
+                <fieldset class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                </fieldset>
+                <div class="form-group">
+                    <label for="title">Content</label>
+                    <textarea rows="10" name="content" class="form-control"></textarea>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="title">Author</label>
+                    <input type="text" class="form-control" id="author" name="author">
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="title">Active</label>
+                    <input type="checkbox" id="active" name="active">
+                </fieldset>
+                <fieldset class="form-group ">
+                    <button class="btn btn-outline-primary btn-sm">Add</button>
+                    <button class="btn btn-outline-danger btn-sm">Reset</button>
+                </fieldset>
+            </form>
+        </main>
+    </section>
+</body>
+
+</html>
