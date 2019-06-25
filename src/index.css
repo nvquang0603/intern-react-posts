@@ -11,23 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-body {
-	max-width: 100vmax;
-	max-height: 100vmin;
-	overflow: hidden;
-}
-.nav {
-	background: #16005C;
-	list-style: none;
-}
-.nav-item {
-	
-	background: #4162CE
-}
-.nav-item:hover {
-	background: #16005C;
-}
-.nav-link {
-	color: #fff;
-	text-decoration: none;
-}
