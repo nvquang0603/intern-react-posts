@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class EditPost extends Component {
+class Edit extends Component {
 
     render() {
         return (
@@ -53,4 +53,4 @@ class EditPost extends Component {
     }
 }
 
-export default EditPost;
+export default Edit;

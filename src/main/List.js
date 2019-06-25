@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
-class ListPosts extends Component {
+class List extends Component {
     handleDelete(item) {
         this.props.onDelete(item);
     }
@@ -46,4 +46,4 @@ class ListPosts extends Component {
     }
 }
 
-export default ListPosts;
+export default List;
