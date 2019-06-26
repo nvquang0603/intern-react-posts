@@ -65,7 +65,7 @@ const DEFAULT_POSTS = [
     },
     {
         id: 9,
-        title: "Post 9,",
+        title: "Post 9",
         content: "This is the content of post 9",
         author: "Văn Quang",
         active: true
@@ -85,6 +85,7 @@ class App extends Component {
             posts: [...DEFAULT_POSTS],
             post: {id: '', title: '', content: '', author: '', active: 1}
         };
+        this.filterUser = this.filterUser.bind(this);
     }
 
     openNav = () => {
@@ -96,6 +97,7 @@ class App extends Component {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft = "0";
     };
+
     onEditItem(itemInput) {
         let {posts} = this.state;
         let newPost = posts.map(item => {
@@ -109,6 +111,7 @@ class App extends Component {
         });
         this.setState({post: {id: '', title: '', content: '', author: '', active: 1}, posts: newPost});
     }
+
     onEdit(post) {
         this.setState({
             post,
@@ -116,13 +119,31 @@ class App extends Component {
     }
     onDelete(id) {
         let prevItems = this.state.posts;
+        let prevFilteredItems = this.state.filteredPost;
         let posts = prevItems.filter((item) => {
             return item.id !== id
         });
+        let filteredPost = prevFilteredItems.filter((item) => {
+            return item.id !== id
+        });
         this.setState({
-            posts
+            posts,
+            filteredPost
         });
     }
+    componentWillMount() {
+        this.setState({
+            filteredPost: [...this.state.posts]
+        })
+    }
+    filterUser = (post) => {
+        let updatingList = this.state.posts;
+        let updatedList = updatingList.filter((item)=>{
+           return item.title.toLowerCase().includes(post.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(post.filterAuthor.toLowerCase()) && item.active === post.filterActive
+        });
+        this.setState({filteredPost: updatedList});
+    };
+
     render() {
         return (
             <div className="App">
@@ -130,13 +151,11 @@ class App extends Component {
                     <BrowserRouter>
                         <div id="mySidenav" className="sidenav">
                             <h3 className="mainTitle text-center">MENU</h3>
-                            <a href="javascript:void(0)" className="closebtn" onClick={() => this.closeNav()}>×</a>
+                            <button className="closebtn btn text-white" onClick={() => this.closeNav()}>×</button>
                             <Link to="/"><i className="fas fa-home"
                                             style={{fontSize: '18px'}}/> Home</Link>
-                            <Link to="/list"><i className="fas fa-list"
-                                                style={{fontSize: '18px'}}/> List</Link>
-                            <Link to="/add"><i className="fas fa-plus-circle"
-                                               style={{fontSize: '18px'}}/> Add new post</Link>
+                            <Link to="/list"><i className="fas fa-list" style={{fontSize: '18px'}}/> List</Link>
+                            <Link to="/add"><i className="fas fa-plus-circle" style={{fontSize: '18px'}}/> Add new post</Link>
                         </div>
                         <br/>
                         <div id="main">
@@ -144,7 +163,13 @@ class App extends Component {
                             <span style={{fontSize: '30px', cursor: 'pointer'}}
                                   onClick={() => this.openNav()} className="mainTitle">☰MENU</span>
                             <Route exact path="/" render={() => (<h2 className="mainTitle"> Hello Admin</h2>)}/>
-                            <Route path="/list" component = {(props) => <List {...props} listPosts={this.state.posts} onDelete={this.onDelete.bind(this)} onEdit={this.onEdit.bind(this)}/>}/>
+                            <Route path="/list" component = {(props) =>
+                                <List {...props}
+                                      listPosts={this.state.filteredPost}
+                                      onDelete={this.onDelete.bind(this)}
+                                      onEdit={this.onEdit.bind(this)}
+                                      filterUser={this.filterUser}
+                                />}/>
                             <Route path="/add" component={Add}/>
                             <Route path="/:id/edit" component={() => <Edit post={this.state.post} onEditItem={this.onEditItem.bind(this)}/>}/>
                         </div>

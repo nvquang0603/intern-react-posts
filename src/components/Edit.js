@@ -13,6 +13,7 @@ class Edit extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleReset = this.handleReset.bind(this);
     }
     componentWillMount() {
         let post = this.props.post;
@@ -25,10 +26,15 @@ class Edit extends Component {
         this.setState({
             [name]:value
         });
+        console.log(this.state.active)
     };
     handleSubmit() {
         this.props.onEditItem(this.state);
         this.props.history.push('/list');
+    }
+    handleReset() {
+        let post = this.props.post;
+        this.setState({...post});
     }
     render() {
         return (
@@ -80,9 +86,11 @@ class Edit extends Component {
                             />
                         </div>
                     </div>
-                    <div className="col-12">
-                        <label>Active </label>
+
+                    <div className="form-check form-check-inline">
+                        <label className={"form-check-label"}>Active </label>
                         <input
+                            className={"form-check-input"}
                             type="checkbox"
                             name={"active"}
                             onChange={this.handleChange}
@@ -90,7 +98,9 @@ class Edit extends Component {
                             checked={this.state.active}
                         />
                     </div>
+
                     <hr/>
+
                     <div className="button-group text-center">
                         <button
                             type="submit"
