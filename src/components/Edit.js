@@ -11,6 +11,7 @@ class Edit extends Component {
             active: 1
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentWillMount() {
         let post = this.props.post;
@@ -24,7 +25,16 @@ class Edit extends Component {
             [name]:value
         });
     };
-
+    handleSubmit() {
+        this.props.onEditItem(this.state);
+        this.setState({
+            id: '',
+            title: '',
+            content: '',
+            author: '',
+            active: 1
+        });
+    }
     render() {
         return (
             <div>
@@ -89,7 +99,7 @@ class Edit extends Component {
                         <button
                             type="submit"
                             className="btn btn-success"
-
+                            onClick={this.handleSubmit.bind(this)}
                         >
                             <i className="far fa-paper-plane" style={{fontSize: '18px'}}/>
                             Submit
