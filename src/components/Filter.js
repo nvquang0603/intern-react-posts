@@ -22,9 +22,12 @@ class Filter extends Component {
     handleSubmit = (event) => {
         this.props.filterUser(this.state);
     };
+    handleReset = (event) => {
+        console.log("hehe");
+    }
     render() {
         return (
-            <div className={"filterField p-4"}>
+            <div className={"filterField p-4 bg-deep-ocean"}>
                 <div className={"row"}>
                     <div className="col">
                         <input
@@ -34,6 +37,7 @@ class Filter extends Component {
                             name={"filterTitle"}
                             value={this.state.filterTitle}
                             onChange={this.handleChange}
+                            onKeyPress={this.pressEnter}
                         />
                     </div>
                     <div className="col">
@@ -59,6 +63,7 @@ class Filter extends Component {
                     </div>
                     <div className="col">
                         <button className="btn btn-warning btn-sm mr-2" onClick={this.handleSubmit}>Submit</button>
+                        <button className="btn btn-primary btn-sm mr-2" onClick={this.handleReset}>Reset</button>
                     </div>
                 </div>
 

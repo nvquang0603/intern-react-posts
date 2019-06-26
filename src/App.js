@@ -97,7 +97,12 @@ class App extends Component {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft = "0";
     };
-
+    onSetPost = (data) => {
+        this.setState({
+            posts: data,
+            filteredPost: data
+        });
+    };
     onEditItem(itemInput) {
         let {posts} = this.state;
         let newPost = posts.map(item => {
@@ -170,7 +175,9 @@ class App extends Component {
                                       onEdit={this.onEdit.bind(this)}
                                       filterUser={this.filterUser}
                                 />}/>
-                            <Route path="/add" component={Add}/>
+                            <Route path="/add"
+                                   component={() => <Add onSetPost={this.onSetPost}
+                                                             listPosts={this.state.posts}/>}/>
                             <Route path="/:id/edit" component={() => <Edit post={this.state.post} onEditItem={this.onEditItem.bind(this)}/>}/>
                         </div>
                     </BrowserRouter>
