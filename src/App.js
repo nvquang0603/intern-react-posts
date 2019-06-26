@@ -83,7 +83,7 @@ class App extends Component {
         super(props);
         this.state = {
             posts: [...DEFAULT_POSTS],
-            post: {id: '', title: '', content: '', author: ''}
+            post: {id: '', title: '', content: '', author: '', active: 1}
         };
     }
 
@@ -103,10 +103,11 @@ class App extends Component {
                 item.title = itemInput.title;
                 item.content = itemInput.content;
                 item.author = itemInput.author;
+                item.active = itemInput.active;
             }
             return item;
         });
-        this.setState({post: {id: '', title: '', content: '', author: ''}, posts: newPost});
+        this.setState({post: {id: '', title: '', content: '', author: '', active: 1}, posts: newPost});
     }
     onEdit(post) {
         this.setState({
