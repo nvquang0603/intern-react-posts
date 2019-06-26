@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 class List extends Component {
     handleDelete(post) {
-        this.props.onDelete(post);
+        if (prompt('Bạn có muốn xóa?')) {
+            this.props.onDelete(post);
+        }
     }
     handleEdit(post) {
         this.props.onEdit(post);

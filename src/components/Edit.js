@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 
 class Edit extends Component {
     constructor(props) {
@@ -8,7 +9,7 @@ class Edit extends Component {
             title: '',
             content: '',
             author: '',
-            active: 1
+            active: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,20 +21,14 @@ class Edit extends Component {
     handleChange = (event) => {
         let target = event.target;
         let name = target.name;
-        let value = target.value;
+        let value = target.type === 'checkbox' ? target.checked : target.value;
         this.setState({
             [name]:value
         });
     };
     handleSubmit() {
         this.props.onEditItem(this.state);
-        this.setState({
-            id: '',
-            title: '',
-            content: '',
-            author: '',
-            active: 0
-        });
+        this.props.history.push('/list');
     }
     render() {
         return (
@@ -91,6 +86,7 @@ class Edit extends Component {
                             type="checkbox"
                             name={"active"}
                             onChange={this.handleChange}
+                            value={this.state.active}
                             checked={this.state.active}
                         />
                     </div>
@@ -120,4 +116,4 @@ class Edit extends Component {
     }
 }
 
-export default Edit;
+export default withRouter(Edit);
