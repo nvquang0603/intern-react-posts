@@ -8,9 +8,10 @@ class Edit extends Component {
             title: '',
             content: '',
             author: '',
-            active: 0
+            active: 1
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentWillMount() {
         let post = this.props.post;
