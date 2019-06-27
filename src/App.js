@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import './App.css';
 import Banner from "./Banner";
+
 import List from "./components/List.js";
 import Add from "./components/Add.js";
 import Edit from "./components/Edit.js";
+
 import {BrowserRouter, Route, NavLink} from "react-router-dom";
+
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
+
+import PropTypes from 'prop-types';
 
 const DEFAULT_POSTS = [
     {
@@ -85,17 +90,20 @@ class App extends Component {
         super(props);
         this.state = {
             posts: [...DEFAULT_POSTS],
-            post: {id: '', title: '', content: '', author: '', active: 1},
+            post: {
+                id: '',
+                title: '',
+                content: '',
+                author: '',
+                active: 1
+            },
             errors: {},
             version: 1,
         };
-        this.addNotification = this.addNotification.bind(this);
         this.notificationDOMRef = React.createRef();
-        this.filterUser = this.filterUser.bind(this);
-        this.resetTable = this.resetTable.bind(this);
-    }
+    };
 
-    addNotification() {
+    editNotification() {
         this.notificationDOMRef.current.addNotification({
             title: "Hoàn tất",
             message: "Chỉnh sửa bài viết thành công",
@@ -107,7 +115,7 @@ class App extends Component {
             dismiss: {duration: 2000},
             dismissable: {click: true}
         });
-    }
+    };
 
     deleteNotification() {
         this.notificationDOMRef.current.addNotification({
@@ -121,7 +129,7 @@ class App extends Component {
             dismiss: {duration: 2000},
             dismissable: {click: true}
         });
-    }
+    };
 
     openNav = () => {
         document.getElementById("mySidenav").style.width = "250px";
@@ -151,14 +159,14 @@ class App extends Component {
             return item;
         });
         this.setState({post: {id: '', title: '', content: '', author: '', active: 1}, posts: newPost});
-        this.addNotification();
-    }
+        this.editNotification();
+    };
 
     onEdit(post) {
         this.setState({
             post,
         });
-    }
+    };
 
     onDelete(id) {
         let prevItems = this.state.posts;
@@ -174,28 +182,15 @@ class App extends Component {
             filteredPost
         });
         this.deleteNotification();
-    }
+    };
 
     componentWillMount() {
         this.setState({
             filteredPost: [...this.state.posts],
             editState: false
-        })
-    }
-
-    filterUser = (post) => {
-        let {posts} = this.state;
-        let updatedList = posts.filter((item) => {
-            return item.title.toLowerCase().includes(post.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(post.filterAuthor.toLowerCase()) && item.active === post.filterActive
         });
-        this.setState({filteredPost: updatedList});
+
     };
-
-    resetTable() {
-        this.setState({
-            filteredPost: [...this.state.posts]
-        });
-    }
 
     render() {
         return (
@@ -230,12 +225,10 @@ class App extends Component {
                                     listPosts={this.state.filteredPost}
                                     onDelete={this.onDelete.bind(this)}
                                     onEdit={this.onEdit.bind(this)}
-                                    filterUser={this.filterUser}
-                                    resetTable={this.resetTable}
                                 />}/>
                             <Route path="/add"
                                    component={() => <Add onSetPost={this.onSetPost}
-                                                         listPosts={this.state.posts}/>}/>
+                                                         listPosts={this.state.filteredPost}/>}/>
                             <Route path="/:id/edit" component={() => <Edit post={this.state.post}
                                                                            onEditItem={this.onEditItem.bind(this)}/>}/>
                         </div>
@@ -243,7 +236,12 @@ class App extends Component {
                 </div>
             </div>
         );
-    }
+    };
 }
+App.propTypes = {
 
+};
+App.defaultProps = {
+
+};
 export default App;

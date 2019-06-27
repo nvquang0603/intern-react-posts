@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Filter from "./Filter";
 
 class Edit extends Component {
     constructor(props) {
@@ -11,17 +13,21 @@ class Edit extends Component {
             author: '',
             active: false,
             errors: {
-                title: "",
+                title: '',
+                content: '',
+                author: ''
             }
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
+
     componentWillMount() {
         let post = this.props.post;
         this.setState({...post});
     }
+
     handleChange = (event) => {
         let target = event.target;
         let name = target.name;
@@ -30,13 +36,26 @@ class Edit extends Component {
             [name]:value
         });
     };
+
     handleSubmit() {
-        this.props.onEditItem(this.state);
-        this.props.history.push('/list');
+        if (this.state.title === '') {
+            this.setState({errors: {title: 'Vui lòng không để trống tiêu đề'}})
+        }
+        else if(this.state.content === '') {
+            this.setState({errors: {content: 'Vui lòng không để trống nội dung'}})
+        }
+        else if(this.state.author === '') {
+            this.setState({errors: {author: 'Vui lòng không để trống tác giả'}})
+        }
+        else {
+            this.props.onEditItem(this.state);
+            this.props.history.push('/list');
+        }
     }
+
     handleReset() {
         let post = this.props.post;
-        this.setState({errors:{title: "required"}});
+        this.setState({errors:{title: '', content: '', author: ''}});
         this.setState({...post});
     }
 
@@ -53,13 +72,15 @@ class Edit extends Component {
                             </div>
                             <input
                                 type={"text"}
-                                className={"form-control border-danger"}
+                                className={"form-control"}
                                 id={"title"}
                                 name={"title"}
                                 onChange={this.handleChange}
                                 value={this.state.title}
                             />
-                            {errors.title !== "" && <span className={"text-danger"}>{errors.title}</span>}
+                        </div>
+                        <div className={'error pb-3'}>
+                            {errors.title !== "" && <span className={"text-danger mx-5"}>{errors.title}</span>}
                         </div>
                     </div>
                     <div className={"col-12"}>
@@ -75,6 +96,9 @@ class Edit extends Component {
                                 value={this.state.content}
                             />
                         </div>
+                        <div className={'error pb-3'}>
+                            {errors.content !== "" && <span className={"text-danger mx-5"}>{errors.content}</span>}
+                        </div>
                     </div>
                     <div className={"col-12"}>
                         <div className={"input-group mb-3"}>
@@ -89,6 +113,9 @@ class Edit extends Component {
                                 onChange={this.handleChange}
                                 value={this.state.author}
                             />
+                        </div>
+                        <div className={'error pb-3'}>
+                            {errors.author !== "" && <span className={"text-danger mx-5"}>{errors.author}</span>}
                         </div>
                     </div>
 
@@ -130,5 +157,12 @@ class Edit extends Component {
         );
     }
 }
-
+Edit.propTypes = {
+    post: PropTypes.object,
+    onEditItem: PropTypes.func
+};
+Edit.defaultProps = {
+    post: {},
+    onEditItem: () => {}
+};
 export default withRouter(Edit);

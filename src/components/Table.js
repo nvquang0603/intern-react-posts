@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
+import PropTypes from 'prop-types';
+import List from "./List";
 
 class Table extends Component {
     handleDelete(post) {
-        let confirmDelete = prompt('Nhập OK để xóa');
-        if ( confirmDelete === 'OK' || confirmDelete === 'ok') {
+        let confirmDelete = window.confirm('Nhập OK để xóa');
+        if ( confirmDelete ) {
             this.props.onDelete(post);
         }
     }
@@ -49,4 +51,15 @@ class Table extends Component {
         )
     }
 }
+Table.propTypes = {
+    listPosts: PropTypes.array,
+    onEdit: PropTypes.func,
+    onDelete: PropTypes.func
+};
+
+Table.defaultProps = {
+    listPosts: [],
+    onEdit: () => {},
+    onDelete: () => {}
+};
 export default Table;

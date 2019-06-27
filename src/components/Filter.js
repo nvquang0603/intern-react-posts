@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 class Filter extends Component {
     constructor(props) {
@@ -6,33 +7,30 @@ class Filter extends Component {
         this.state = {
             filterTitle: '',
             filterAuthor: '',
-            filterActive: false
+            filterActive: 'all'
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange = (event) => {
-        console.log("handleChange");
         let target = event.target;
         let name = target.name;
-        let value = target.type === 'checkbox' ? target.checked : target.value;
+        let value = target.value;
         this.setState({
             [name]: value
         })
     };
 
     handleSubmit = (event) => {
-        console.log("handleSubmit");
         this.props.filterUser({...this.state});
     };
 
     handleReset = (event) => {
-        console.log("handleReset");
         this.setState({
             filterTitle: '',
             filterAuthor: '',
-            filterActive: false
+            filterActive: 'all'
         });
         this.props.resetTable()
     };
@@ -43,7 +41,6 @@ class Filter extends Component {
                 <div className={"row"}>
                     <div className="col-3">
                         <input
-                            type={"title"}
                             className={"form-control"}
                             placeholder={"Search by title"}
                             name={"filterTitle"}
@@ -58,7 +55,6 @@ class Filter extends Component {
                     </div>
                     <div className="col-3">
                         <input
-                            type={"author"}
                             className={"form-control"}
                             placeholder={"Search by author"}
                             name={"filterAuthor"}
@@ -73,20 +69,22 @@ class Filter extends Component {
                     </div>
                     <div className="col-4 form-check form-check-inline">
                         <label className={"form-check-label font-weight-bold"} htmlFor={"filterActive"}>
-                            <input
-                                type={'checkbox'}
-                                className={"form-check-input"}
-                                name={"filterActive"}
-                                value={this.state.filterActive}
-                                checked={this.state.filterActive}
-                                onChange={this.handleChange}
-                            /> Active</label> &nbsp;
+                            <select
+                                    className={"form-control"}
+                                    name={"filterActive"}
+                                    value={this.state.filterActive}
+                                    onChange={this.handleChange}>
+                                <option value={"all"}>All</option>
+                                <option value={true}>Active</option>
+                                <option value={false}>Inactive</option>
+                            </select>
+                        </label> &nbsp;
                         <button
-                            className="btn btn-outline-warning mx-2"
+                            className="btn btn-outline-warning mx-1"
                             onClick={this.handleSubmit}
                         ><i className="fas fa-search text-white" /></button>
                         <button
-                            className="btn btn-outline-primary mx-2"
+                            className="btn btn-outline-primary mx-1"
                             onClick={this.handleReset}
                         ><i className="fas fa-undo text-white"/></button>
                     </div>
@@ -96,5 +94,12 @@ class Filter extends Component {
         );
     }
 }
-
+Filter.propTypes = {
+    filterUser: PropTypes.func,
+    resetTable: PropTypes.func
+};
+Filter.defaultProps = {
+    filterUser: () => {},
+    resetTable: () => {}
+};
 export default Filter;

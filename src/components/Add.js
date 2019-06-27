@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import List from "./List";
 
 class AddPost extends Component {
 
@@ -110,5 +112,13 @@ class AddPost extends Component {
         );
     }
 }
+List.propTypes = {
+    listPosts: PropTypes.array,
+    onSetPost: PropTypes.func,
+};
 
+List.defaultProps = {
+    listPosts: [],
+    onSetPost: () => {},
+};
 export default withRouter(AddPost);
