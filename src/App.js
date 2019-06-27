@@ -89,16 +89,31 @@ class App extends Component {
             errors: {},
             version: 1,
         };
-        this.addNotification = this.addNotification.bind(this);
+        this.editNotification = this.editNotification.bind(this);
+        this.successAddNotification = this.successAddNotification.bind(this);
         this.notificationDOMRef = React.createRef();
         this.filterUser = this.filterUser.bind(this);
         this.resetTable = this.resetTable.bind(this);
     }
 
-    addNotification() {
+    successAddNotification() {
         this.notificationDOMRef.current.addNotification({
-            title: "Hoàn tất",
-            message: "Chỉnh sửa bài viết thành công",
+            title: "Success",
+            message: "New post has been added!",
+            type: "success",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: {duration: 2000},
+            dismissable: {click: true}
+        });
+    }
+
+    editNotification() {
+        this.notificationDOMRef.current.addNotification({
+            title: "Success",
+            message: "The post has been updated!",
             type: "success",
             insert: "top",
             container: "top-right",
@@ -111,8 +126,8 @@ class App extends Component {
 
     deleteNotification() {
         this.notificationDOMRef.current.addNotification({
-            title: "Hoàn tất",
-            message: "Đã xóa bài viết",
+            title: "Deleted!",
+            message: "The post has been deleted!",
             type: "danger",
             insert: "top",
             container: "top-right",
@@ -137,6 +152,7 @@ class App extends Component {
             posts: data,
             filteredPost: data
         });
+        this.successAddNotification();
     };
 
     onEditItem(itemInput) {
@@ -151,7 +167,7 @@ class App extends Component {
             return item;
         });
         this.setState({post: {id: '', title: '', content: '', author: '', active: 1}, posts: newPost});
-        this.addNotification();
+        this.editNotification()
     }
 
     onEdit(post) {
@@ -215,7 +231,6 @@ class App extends Component {
                         </div>
                         <br/>
                         <div id="main">
-
                             <Banner/>
                             <div className="app-content">
                                 <ReactNotification ref={this.notificationDOMRef}/>

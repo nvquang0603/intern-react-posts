@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 class Table extends Component {
     handleDelete(post) {
-        let confirmDelete = prompt('Nhập OK để xóa');
+        let confirmDelete = prompt('Are you sure to delete this post? Type "OK" to delete!');
         if ( confirmDelete === 'OK' || confirmDelete === 'ok') {
             this.props.onDelete(post);
         }

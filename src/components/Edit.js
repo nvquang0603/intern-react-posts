@@ -10,38 +10,62 @@ class Edit extends Component {
             content: '',
             author: '',
             active: false,
-            errors: {
-                title: "",
-            }
+            errors: {}
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
+
+    validation = () => {
+        let data = this.state;
+        console.log('data=>>> :',data);
+        let error = {};
+        let validation = true;
+        if (!data['title'] || data['title'] === "") {
+            validation = false;
+            error['title'] = "Title is required!"
+        }
+        if (!data['content'] || data['content'] === "") {
+            validation = false;
+            error['content'] = "Content is required!"
+        }
+        if (!data['author'] || data['author'] === "") {
+            validation = false;
+            error['author'] = "Author is required!"
+        }
+        this.setState({errors: error});
+        console.log(error);
+        return validation;
+    }
+
     componentWillMount() {
         let post = this.props.post;
         this.setState({...post});
     }
+
     handleChange = (event) => {
         let target = event.target;
         let name = target.name;
         let value = target.type === 'checkbox' ? target.checked : target.value;
         this.setState({
-            [name]:value
+            [name]: value
         });
     };
-    handleSubmit() {
-        this.props.onEditItem(this.state);
-        this.props.history.push('/list');
-    }
+
+    handleSubmit = (event) => {
+        if (this.validation()) {
+            this.props.onEditItem(this.state);
+            this.props.history.push('/list');
+        }
+    };
+
     handleReset() {
         let post = this.props.post;
-        this.setState({errors:{title: "required"}});
         this.setState({...post});
     }
 
     render() {
-        let {errors} = this.state;
         return (
             <div>
                 <div className={"jumbotron"}>
@@ -59,13 +83,14 @@ class Edit extends Component {
                                 onChange={this.handleChange}
                                 value={this.state.title}
                             />
-                            {errors.title !== "" && <span className={"text-danger"}>{errors.title}</span>}
                         </div>
+                        <span style={{color: "red"}}>{this.state.errors["title"]}</span>
                     </div>
                     <div className={"col-12"}>
                         <div className={"input-group mb-3"}>
                             <div className={"input-group-prepend"}>
-                                <span className={"input-group-text"}><i className={"fas fa-file-contract"} style={{fontSize: '20px'}}/></span>
+                                <span className={"input-group-text"}><i className={"fas fa-file-contract"}
+                                                                        style={{fontSize: '20px'}}/></span>
                             </div>
                             <textarea
                                 rows={"10"}
@@ -75,6 +100,7 @@ class Edit extends Component {
                                 value={this.state.content}
                             />
                         </div>
+                        <span style={{color: "red"}}>{this.state.errors["content"]}</span>
                     </div>
                     <div className={"col-12"}>
                         <div className={"input-group mb-3"}>
@@ -90,6 +116,7 @@ class Edit extends Component {
                                 value={this.state.author}
                             />
                         </div>
+                        <span style={{color: "red"}}>{this.state.errors["author"]}</span>
                     </div>
 
                     <div className={"form-check form-check-inline p-3"}>
