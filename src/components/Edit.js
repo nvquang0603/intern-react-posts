@@ -26,7 +26,6 @@ class Edit extends Component {
         this.setState({
             [name]:value
         });
-        console.log(this.state.active)
     };
     handleSubmit() {
         this.props.onEditItem(this.state);
@@ -48,7 +47,7 @@ class Edit extends Component {
                             </div>
                             <input
                                 type={"text"}
-                                className={"form-control"}
+                                className={"form-control border-danger"}
                                 id={"title"}
                                 name={"title"}
                                 onChange={this.handleChange}

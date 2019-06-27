@@ -4,7 +4,9 @@ import Banner from "./Banner";
 import List from "./components/List.js";
 import Add from "./components/Add.js";
 import Edit from "./components/Edit.js";
-import {BrowserRouter, Link, Route} from "react-router-dom";
+import {BrowserRouter, Route, NavLink } from "react-router-dom";
+import ReactNotification from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 const DEFAULT_POSTS = [
     {
@@ -83,9 +85,39 @@ class App extends Component {
         super(props);
         this.state = {
             posts: [...DEFAULT_POSTS],
-            post: {id: '', title: '', content: '', author: '', active: 1}
+            post: {id: '', title: '', content: '', author: '', active: 1},
+            errors: {}
         };
+        this.addNotification = this.addNotification.bind(this);
+        this.notificationDOMRef = React.createRef();
         this.filterUser = this.filterUser.bind(this);
+        this.resetTable = this.resetTable.bind(this);
+    }
+    addNotification() {
+        this.notificationDOMRef.current.addNotification({
+            title: "Hoàn tất",
+            message: "Chỉnh sửa bài viết thành công",
+            type: "success",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: { duration: 2000 },
+            dismissable: { click: true }
+        });
+    }
+    deleteNotification() {
+        this.notificationDOMRef.current.addNotification({
+            title: "Hoàn tất",
+            message: "Đã xóa bài viết",
+            type: "danger",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: { duration: 2000 },
+            dismissable: { click: true }
+        });
     }
 
     openNav = () => {
@@ -115,6 +147,7 @@ class App extends Component {
             return item;
         });
         this.setState({post: {id: '', title: '', content: '', author: '', active: 1}, posts: newPost});
+        this.addNotification();
     }
 
     onEdit(post) {
@@ -135,10 +168,12 @@ class App extends Component {
             posts,
             filteredPost
         });
+        this.deleteNotification();
     }
     componentWillMount() {
         this.setState({
-            filteredPost: [...this.state.posts]
+            filteredPost: [...this.state.posts],
+            editState: false
         })
     }
     filterUser = (post) => {
@@ -148,7 +183,11 @@ class App extends Component {
         });
         this.setState({filteredPost: updatedList});
     };
-
+    resetTable() {
+        this.setState({
+            filteredPost: [...this.state.posts]
+        })
+    }
     render() {
         return (
             <div className="App">
@@ -157,23 +196,28 @@ class App extends Component {
                         <div id="mySidenav" className="sidenav">
                             <h3 className="mainTitle text-center">MENU</h3>
                             <button className="closebtn btn text-white" onClick={() => this.closeNav()}>×</button>
-                            <Link to="/"><i className="fas fa-home"
-                                            style={{fontSize: '18px'}}/> Home</Link>
-                            <Link to="/list"><i className="fas fa-list" style={{fontSize: '18px'}}/> List</Link>
-                            <Link to="/add"><i className="fas fa-plus-circle" style={{fontSize: '18px'}}/> Add new post</Link>
+                            <NavLink exact to="/" activeClassName={"active"}><i className="fas fa-home"
+                                            style={{fontSize: '18px'}}/> Home</NavLink>
+                            <NavLink to="/list" activeClassName={"active"}><i className="fas fa-list" style={{fontSize: '18px'}}/> List</NavLink>
+                            <NavLink to="/add" activeClassName={"active"}><i className="fas fa-plus-circle" style={{fontSize: '18px'}}/> Add new post</NavLink>
                         </div>
                         <br/>
                         <div id="main">
+
                             <Banner />
+                            <div className="app-content">
+                                <ReactNotification ref={this.notificationDOMRef} />
+                            </div>
                             <span style={{fontSize: '30px', cursor: 'pointer'}}
                                   onClick={() => this.openNav()} className="mainTitle">☰MENU</span>
-                            <Route exact path="/" render={() => (<h2 className="mainTitle"> Hello Admin</h2>)}/>
+                            <Route exact path="/" render={() => (<h2 className="mainTitle p-5 d-flex justify-content-center"> Hello Admin</h2>)}/>
                             <Route path="/list" component = {(props) =>
                                 <List {...props}
                                       listPosts={this.state.filteredPost}
                                       onDelete={this.onDelete.bind(this)}
                                       onEdit={this.onEdit.bind(this)}
                                       filterUser={this.filterUser}
+                                      resetTable={this.resetTable}
                                 />}/>
                             <Route path="/add"
                                    component={() => <Add onSetPost={this.onSetPost}

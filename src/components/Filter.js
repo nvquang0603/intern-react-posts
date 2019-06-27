@@ -6,7 +6,7 @@ class Filter extends Component {
         this.state = {
             filterTitle: '',
             filterAuthor: '',
-            filterActive: true
+            filterActive: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,13 +23,18 @@ class Filter extends Component {
         this.props.filterUser(this.state);
     };
     handleReset = (event) => {
-        console.log("hehe");
+        this.setState({
+            filterTitle: '',
+            filterAuthor: '',
+            filterActive: false
+        });
+        this.props.resetTable()
     }
     render() {
         return (
             <div className={"filterField p-4 bg-deep-ocean"}>
                 <div className={"row"}>
-                    <div className="col">
+                    <div className="col-3">
                         <input
                             type={"title"}
                             className={"form-control"}
@@ -37,10 +42,14 @@ class Filter extends Component {
                             name={"filterTitle"}
                             value={this.state.filterTitle}
                             onChange={this.handleChange}
-                            onKeyPress={this.pressEnter}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    this.handleSubmit()
+                                }
+                            }}
                         />
                     </div>
-                    <div className="col">
+                    <div className="col-3">
                         <input
                             type={"author"}
                             className={"form-control"}
@@ -48,22 +57,24 @@ class Filter extends Component {
                             name={"filterAuthor"}
                             value={this.state.filterAuthor}
                             onChange={this.handleChange}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    this.handleSubmit()
+                                }
+                            }}
                         />
                     </div>
-                    <div className="col-3 form-check form-check-inline">
-                        <input
-                            type={'checkbox'}
-                            className={"form-check-input"}
-                            name={"filterActive"}
-                            value={this.state.filterActive}
-                            checked={this.state.filterActive}
-                            onChange={this.handleChange}
-                        />
-                        <label className={"form-check-label font-weight-bold"} htmlFor={"filterActive"}>Active</label>
-                    </div>
-                    <div className="col">
-                        <button className="btn btn-warning btn-sm mr-2" onClick={this.handleSubmit}>Submit</button>
-                        <button className="btn btn-primary btn-sm mr-2" onClick={this.handleReset}>Reset</button>
+                    <div className="col-2 form-check form-check-inline">
+                        <label className={"form-check-label font-weight-bold"} htmlFor={"filterActive"}>
+                            <input
+                                type={'checkbox'}
+                                className={"form-check-input"}
+                                name={"filterActive"}
+                                value={this.state.filterActive}
+                                checked={this.state.filterActive}
+                                onChange={this.handleChange}
+                            /> Active</label> &nbsp;
+                        <button className="btn btn-sm" onClick={this.handleReset}><i className="fas fa-undo text-primary"/></button>
                     </div>
                 </div>
 

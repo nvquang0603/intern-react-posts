@@ -14,25 +14,23 @@ class Table extends Component {
     render() {
         return (
             <table className="table table-dark table-hover">
-                <thead>
+                <thead className={"text-center"}>
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>Created at</th>
                     <th>Active</th>
-                    <th/>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {
                     this.props.listPosts.map(post => {
                         return (
-                            <tr key={post.id}>
+                            <tr key={post.id} className={"text-center"}>
                                 <td>{post.id}</td>
                                 <td>{post.title}</td>
                                 <td>{post.author}</td>
-                                <td/>
                                 <td>
                                     {post.active === true ? <i className="fas fa-check text-success"/> : <i className="fas fa-ban text-danger" />}
                                 </td>

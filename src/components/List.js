@@ -8,7 +8,7 @@ class List extends Component {
             <div>
                 <div className="listTopics">
                     <h2 className="mainTitle text-center">List Topics</h2>
-                    <Filter filterUser={this.props.filterUser}/>
+                    <Filter filterUser={this.props.filterUser} resetTable={this.props.resetTable}/>
                     <Table listPosts = {this.props.listPosts} onDelete={this.props.onDelete} onEdit={this.props.onEdit}/>
                 </div>
             </div>
