@@ -105,8 +105,8 @@ class App extends Component {
 
     editNotification() {
         this.notificationDOMRef.current.addNotification({
-            title: "Hoàn tất",
-            message: "Chỉnh sửa bài viết thành công",
+            title: "Done",
+            message: "Your post has been edited",
             type: "success",
             insert: "top",
             container: "top-right",
@@ -117,10 +117,10 @@ class App extends Component {
         });
     };
 
-    deleteNotification() {
+    deleteNotification(title) {
         this.notificationDOMRef.current.addNotification({
-            title: "Hoàn tất",
-            message: "Đã xóa bài viết",
+            title: "Done",
+            message: 'Your post "' + title + '" has been deleted',
             type: "danger",
             insert: "top",
             container: "top-right",
@@ -168,20 +168,20 @@ class App extends Component {
         });
     };
 
-    onDelete(id) {
+    onDelete(post) {
         let prevItems = this.state.posts;
         let prevFilteredItems = this.state.filteredPost;
         let posts = prevItems.filter((item) => {
-            return item.id !== id
+            return item.id !== post.id
         });
         let filteredPost = prevFilteredItems.filter((item) => {
-            return item.id !== id
+            return item.id !== post.id
         });
         this.setState({
             posts,
             filteredPost
         });
-        this.deleteNotification();
+        this.deleteNotification(post.title);
     };
 
     componentWillMount() {

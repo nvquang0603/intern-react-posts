@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Filter from "./Filter";
 
 class Edit extends Component {
     constructor(props) {
@@ -39,13 +38,13 @@ class Edit extends Component {
 
     handleSubmit() {
         if (this.state.title === '') {
-            this.setState({errors: {title: 'Vui lòng không để trống tiêu đề'}})
+            this.setState({errors: {title: 'Please fill this title field'}})
         }
         else if(this.state.content === '') {
-            this.setState({errors: {content: 'Vui lòng không để trống nội dung'}})
+            this.setState({errors: {content: 'Please fill this content field'}})
         }
         else if(this.state.author === '') {
-            this.setState({errors: {author: 'Vui lòng không để trống tác giả'}})
+            this.setState({errors: {author: 'Please fill this author field'}})
         }
         else {
             this.props.onEditItem(this.state);

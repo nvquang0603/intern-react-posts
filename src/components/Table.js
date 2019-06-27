@@ -5,7 +5,7 @@ import List from "./List";
 
 class Table extends Component {
     handleDelete(post) {
-        let confirmDelete = window.confirm('Nhập OK để xóa');
+        let confirmDelete = window.confirm('Are you sure? Press Enter or click Ok to delete');
         if ( confirmDelete ) {
             this.props.onDelete(post);
         }
@@ -29,17 +29,17 @@ class Table extends Component {
                 {
                     this.props.listPosts.map(post => {
                         return (
-                            <tr key={post.id} className={"text-center"}>
-                                <td>{post.id}</td>
+                            <tr key={post.id}>
+                                <td className={"text-center"}>{post.id}</td>
                                 <td>{post.title}</td>
-                                <td>{post.author}</td>
-                                <td>
+                                <td className={"text-center"}>{post.author}</td>
+                                <td className={"text-center"}>
                                     {post.active === true ? <i className="fas fa-check text-success"/> : <i className="fas fa-ban text-danger" />}
                                 </td>
-                                <td>
+                                <td className={"text-center"}>
                                     <div className="form-group">
                                         <Link to={`/${post.id}/edit`} className="btn btn-warning btn-sm font-weight-bold" onClick={this.handleEdit.bind(this, post)}>Edit</Link>
-                                        <button className="btn btn-danger btn-sm ml-2 font-weight-bold" onClick={this.handleDelete.bind(this, post.id)}>Delete</button>
+                                        <button className="btn btn-danger btn-sm ml-2 font-weight-bold" onClick={this.handleDelete.bind(this, post)}>Delete</button>
                                     </div>
                                 </td>
                             </tr>
