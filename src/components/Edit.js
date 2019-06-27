@@ -12,9 +12,18 @@ class Edit extends Component {
             author: '',
             active: false,
             errors: {
-                title: '',
-                content: '',
-                author: ''
+                title: {
+                    dangerBorder: '',
+                    message: ''
+                },
+                content: {
+                    dangerBorder: '',
+                    message: ''
+                },
+                author: {
+                    dangerBorder: '',
+                    message: ''
+                }
             }
         };
         this.handleChange = this.handleChange.bind(this);
@@ -26,7 +35,40 @@ class Edit extends Component {
         let post = this.props.post;
         this.setState({...post});
     }
-
+    handleValidation = () => {
+        let error = {
+            title: {
+                dangerBorder: false,
+                message: ''
+            },
+            content: {
+                dangerBorder: false,
+                message: ''
+            },
+            author: {
+                dangerBorder: false,
+                message: ''
+            }
+        };
+        let isInputValid = true;
+        if (this.state.title === '') {
+            isInputValid = false;
+            error.title.message = "Title is required!";
+            error.title.dangerBorder = true;
+        }
+        if (this.state.content === '') {
+            isInputValid = false;
+            error.content.message = "Content is required!";
+            error.content.dangerBorder = true;
+        }
+        if (this.state.author === '') {
+            isInputValid = false;
+            error.author.message = "Author is required!";
+            error.author.dangerBorder = true;
+        }
+        this.setState({errors: error});
+        return isInputValid;
+    };
     handleChange = (event) => {
         let target = event.target;
         let name = target.name;
@@ -36,21 +78,12 @@ class Edit extends Component {
         });
     };
 
-    handleSubmit() {
-        if (this.state.title === '') {
-            this.setState({errors: {title: 'Please fill this title field'}})
-        }
-        else if(this.state.content === '') {
-            this.setState({errors: {content: 'Please fill this content field'}})
-        }
-        else if(this.state.author === '') {
-            this.setState({errors: {author: 'Please fill this author field'}})
-        }
-        else {
+    handleSubmit = (event) => {
+        if (this.handleValidation()) {
             this.props.onEditItem(this.state);
             this.props.history.push('/list');
         }
-    }
+    };
 
     handleReset() {
         let post = this.props.post;
@@ -71,15 +104,16 @@ class Edit extends Component {
                             </div>
                             <input
                                 type={"text"}
-                                className={"form-control"}
+                                className={errors.title.dangerBorder === true ? "form-control border-danger" : "form-control"}
                                 id={"title"}
                                 name={"title"}
                                 onChange={this.handleChange}
+                                onBlur={this.handleValidation}
                                 value={this.state.title}
                             />
                         </div>
                         <div className={'error pb-3'}>
-                            {errors.title !== "" && <span className={"text-danger mx-5"}>{errors.title}</span>}
+                            {errors.title.message !== '' && <span className={"text-danger mx-5"}>{errors.title.message}</span>}
                         </div>
                     </div>
                     <div className={"col-12"}>
@@ -89,14 +123,15 @@ class Edit extends Component {
                             </div>
                             <textarea
                                 rows={"10"}
-                                className={"form-control"}
+                                className={errors.content.dangerBorder === true ? "form-control border-danger" : "form-control"}
                                 name={"content"}
                                 onChange={this.handleChange}
+                                onBlur={this.handleValidation}
                                 value={this.state.content}
                             />
                         </div>
                         <div className={'error pb-3'}>
-                            {errors.content !== "" && <span className={"text-danger mx-5"}>{errors.content}</span>}
+                            {errors.content.message !== '' && <span className={"text-danger mx-5"}>{errors.content.message}</span>}
                         </div>
                     </div>
                     <div className={"col-12"}>
@@ -106,15 +141,16 @@ class Edit extends Component {
                             </div>
                             <input
                                 type={"text"}
-                                className={"form-control"}
+                                className={errors.author.dangerBorder === true ? "form-control border-danger" : "form-control"}
                                 id={"author"}
                                 name={"author"}
                                 onChange={this.handleChange}
+                                onBlur={this.handleValidation}
                                 value={this.state.author}
                             />
                         </div>
                         <div className={'error pb-3'}>
-                            {errors.author !== "" && <span className={"text-danger mx-5"}>{errors.author}</span>}
+                            {errors.author.message !== '' && <span className={"text-danger mx-5"}>{errors.author.message}</span>}
                         </div>
                     </div>
 

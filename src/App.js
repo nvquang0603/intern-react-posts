@@ -200,13 +200,19 @@ class App extends Component {
                         <div id="mySidenav" className="sidenav">
                             <h3 className="mainTitle text-center">MENU</h3>
                             <button className="closebtn btn text-white" onClick={() => this.closeNav()}>×</button>
-                            <NavLink exact to="/" activeClassName={"active"}><i className="fas fa-home"
-                                                                                style={{fontSize: '18px'}}/> Home</NavLink>
-                            <NavLink to="/list" activeClassName={"active"}><i className="fas fa-list"
-                                                                              style={{fontSize: '18px'}}/> List</NavLink>
-                            <NavLink to="/add" activeClassName={"active"}><i className="fas fa-plus-circle"
-                                                                             style={{fontSize: '18px'}}/> Add new
-                                post</NavLink>
+                            <NavLink
+                                exact to="/"
+                                activeClassName={"active"}>
+                                <i className="fas fa-home" style={{fontSize: '18px'}}/> Home
+                            </NavLink>
+                            <NavLink
+                                to="/list"
+                                activeClassName={"active"}><i className="fas fa-list" style={{fontSize: '18px'}}/>List
+                            </NavLink>
+                            <NavLink
+                                to="/add"
+                                activeClassName={"active"}><i className="fas fa-plus-circle" style={{fontSize: '18px'}}/> Add new post
+                            </NavLink>
                         </div>
                         <br/>
                         <div id="main">
