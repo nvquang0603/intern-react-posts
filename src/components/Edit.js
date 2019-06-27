@@ -9,7 +9,10 @@ class Edit extends Component {
             title: '',
             content: '',
             author: '',
-            active: false
+            active: false,
+            errors: {
+                title: "",
+            }
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,9 +36,12 @@ class Edit extends Component {
     }
     handleReset() {
         let post = this.props.post;
+        this.setState({errors:{title: "required"}});
         this.setState({...post});
     }
+
     render() {
+        let {errors} = this.state;
         return (
             <div>
                 <div className={"jumbotron"}>
@@ -53,6 +59,7 @@ class Edit extends Component {
                                 onChange={this.handleChange}
                                 value={this.state.title}
                             />
+                            {errors.title !== "" && <span className={"text-danger"}>{errors.title}</span>}
                         </div>
                     </div>
                     <div className={"col-12"}>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class Filter extends Component {
     constructor(props) {
@@ -11,25 +11,32 @@ class Filter extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
     handleChange = (event) => {
+        console.log("handleChange");
         let target = event.target;
         let name = target.name;
         let value = target.type === 'checkbox' ? target.checked : target.value;
         this.setState({
-            [name]:value
+            [name]: value
         })
     };
+
     handleSubmit = (event) => {
-        this.props.filterUser(this.state);
+        console.log("handleSubmit");
+        this.props.filterUser({...this.state});
     };
+
     handleReset = (event) => {
+        console.log("handleReset");
         this.setState({
             filterTitle: '',
             filterAuthor: '',
             filterActive: false
         });
         this.props.resetTable()
-    }
+    };
+
     render() {
         return (
             <div className={"filterField p-4 bg-deep-ocean"}>
@@ -64,7 +71,7 @@ class Filter extends Component {
                             }}
                         />
                     </div>
-                    <div className="col-2 form-check form-check-inline">
+                    <div className="col-4 form-check form-check-inline">
                         <label className={"form-check-label font-weight-bold"} htmlFor={"filterActive"}>
                             <input
                                 type={'checkbox'}
@@ -74,7 +81,14 @@ class Filter extends Component {
                                 checked={this.state.filterActive}
                                 onChange={this.handleChange}
                             /> Active</label> &nbsp;
-                        <button className="btn btn-sm" onClick={this.handleReset}><i className="fas fa-undo text-primary"/></button>
+                        <button
+                            className="btn btn-outline-warning mx-2"
+                            onClick={this.handleSubmit}
+                        ><i className="fas fa-search text-white" /></button>
+                        <button
+                            className="btn btn-outline-primary mx-2"
+                            onClick={this.handleReset}
+                        ><i className="fas fa-undo text-white"/></button>
                     </div>
                 </div>
 
@@ -82,4 +96,5 @@ class Filter extends Component {
         );
     }
 }
+
 export default Filter;

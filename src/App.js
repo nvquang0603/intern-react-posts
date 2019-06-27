@@ -4,7 +4,7 @@ import Banner from "./Banner";
 import List from "./components/List.js";
 import Add from "./components/Add.js";
 import Edit from "./components/Edit.js";
-import {BrowserRouter, Route, NavLink } from "react-router-dom";
+import {BrowserRouter, Route, NavLink} from "react-router-dom";
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 
@@ -86,13 +86,15 @@ class App extends Component {
         this.state = {
             posts: [...DEFAULT_POSTS],
             post: {id: '', title: '', content: '', author: '', active: 1},
-            errors: {}
+            errors: {},
+            version: 1,
         };
         this.addNotification = this.addNotification.bind(this);
         this.notificationDOMRef = React.createRef();
         this.filterUser = this.filterUser.bind(this);
         this.resetTable = this.resetTable.bind(this);
     }
+
     addNotification() {
         this.notificationDOMRef.current.addNotification({
             title: "Hoàn tất",
@@ -102,10 +104,11 @@ class App extends Component {
             container: "top-right",
             animationIn: ["animated", "fadeIn"],
             animationOut: ["animated", "fadeOut"],
-            dismiss: { duration: 2000 },
-            dismissable: { click: true }
+            dismiss: {duration: 2000},
+            dismissable: {click: true}
         });
     }
+
     deleteNotification() {
         this.notificationDOMRef.current.addNotification({
             title: "Hoàn tất",
@@ -115,8 +118,8 @@ class App extends Component {
             container: "top-right",
             animationIn: ["animated", "fadeIn"],
             animationOut: ["animated", "fadeOut"],
-            dismiss: { duration: 2000 },
-            dismissable: { click: true }
+            dismiss: {duration: 2000},
+            dismissable: {click: true}
         });
     }
 
@@ -135,10 +138,11 @@ class App extends Component {
             filteredPost: data
         });
     };
+
     onEditItem(itemInput) {
         let {posts} = this.state;
         let newPost = posts.map(item => {
-            if (itemInput.id === item.id){
+            if (itemInput.id === item.id) {
                 item.title = itemInput.title;
                 item.content = itemInput.content;
                 item.author = itemInput.author;
@@ -155,6 +159,7 @@ class App extends Component {
             post,
         });
     }
+
     onDelete(id) {
         let prevItems = this.state.posts;
         let prevFilteredItems = this.state.filteredPost;
@@ -170,24 +175,28 @@ class App extends Component {
         });
         this.deleteNotification();
     }
+
     componentWillMount() {
         this.setState({
             filteredPost: [...this.state.posts],
             editState: false
         })
     }
+
     filterUser = (post) => {
-        let updatingList = this.state.posts;
-        let updatedList = updatingList.filter((item)=>{
-           return item.title.toLowerCase().includes(post.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(post.filterAuthor.toLowerCase()) && item.active === post.filterActive
+        let {posts} = this.state;
+        let updatedList = posts.filter((item) => {
+            return item.title.toLowerCase().includes(post.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(post.filterAuthor.toLowerCase()) && item.active === post.filterActive
         });
         this.setState({filteredPost: updatedList});
     };
+
     resetTable() {
         this.setState({
             filteredPost: [...this.state.posts]
-        })
+        });
     }
+
     render() {
         return (
             <div className="App">
@@ -197,32 +206,38 @@ class App extends Component {
                             <h3 className="mainTitle text-center">MENU</h3>
                             <button className="closebtn btn text-white" onClick={() => this.closeNav()}>×</button>
                             <NavLink exact to="/" activeClassName={"active"}><i className="fas fa-home"
-                                            style={{fontSize: '18px'}}/> Home</NavLink>
-                            <NavLink to="/list" activeClassName={"active"}><i className="fas fa-list" style={{fontSize: '18px'}}/> List</NavLink>
-                            <NavLink to="/add" activeClassName={"active"}><i className="fas fa-plus-circle" style={{fontSize: '18px'}}/> Add new post</NavLink>
+                                                                                style={{fontSize: '18px'}}/> Home</NavLink>
+                            <NavLink to="/list" activeClassName={"active"}><i className="fas fa-list"
+                                                                              style={{fontSize: '18px'}}/> List</NavLink>
+                            <NavLink to="/add" activeClassName={"active"}><i className="fas fa-plus-circle"
+                                                                             style={{fontSize: '18px'}}/> Add new
+                                post</NavLink>
                         </div>
                         <br/>
                         <div id="main">
 
-                            <Banner />
+                            <Banner/>
                             <div className="app-content">
-                                <ReactNotification ref={this.notificationDOMRef} />
+                                <ReactNotification ref={this.notificationDOMRef}/>
                             </div>
                             <span style={{fontSize: '30px', cursor: 'pointer'}}
                                   onClick={() => this.openNav()} className="mainTitle">☰MENU</span>
-                            <Route exact path="/" render={() => (<h2 className="mainTitle p-5 d-flex justify-content-center"> Hello Admin</h2>)}/>
-                            <Route path="/list" component = {(props) =>
-                                <List {...props}
-                                      listPosts={this.state.filteredPost}
-                                      onDelete={this.onDelete.bind(this)}
-                                      onEdit={this.onEdit.bind(this)}
-                                      filterUser={this.filterUser}
-                                      resetTable={this.resetTable}
+                            <Route exact path="/" render={() => (
+                                <h2 className="mainTitle p-5 d-flex justify-content-center"> Hello Admin</h2>)}/>
+                            <Route path="/list" component={(props) =>
+                                <List
+                                    version={this.state.version}
+                                    listPosts={this.state.filteredPost}
+                                    onDelete={this.onDelete.bind(this)}
+                                    onEdit={this.onEdit.bind(this)}
+                                    filterUser={this.filterUser}
+                                    resetTable={this.resetTable}
                                 />}/>
                             <Route path="/add"
                                    component={() => <Add onSetPost={this.onSetPost}
-                                                             listPosts={this.state.posts}/>}/>
-                            <Route path="/:id/edit" component={() => <Edit post={this.state.post} onEditItem={this.onEditItem.bind(this)}/>}/>
+                                                         listPosts={this.state.posts}/>}/>
+                            <Route path="/:id/edit" component={() => <Edit post={this.state.post}
+                                                                           onEditItem={this.onEditItem.bind(this)}/>}/>
                         </div>
                     </BrowserRouter>
                 </div>
