@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
-
+import {Switch} from "antd";
+import 'antd/dist/antd.css';
 class Edit extends Component {
     constructor(props) {
         super(props);
@@ -53,17 +54,17 @@ class Edit extends Component {
         let isInputValid = true;
         if (this.state.title === '') {
             isInputValid = false;
-            error.title.message = "Title is required!";
+            error.title.message = "Title field is required!";
             error.title.dangerBorder = true;
         }
         if (this.state.content === '') {
             isInputValid = false;
-            error.content.message = "Content is required!";
+            error.content.message = "Content field is required!";
             error.content.dangerBorder = true;
         }
         if (this.state.author === '') {
             isInputValid = false;
-            error.author.message = "Author is required!";
+            error.author.message = "Author field is required!";
             error.author.dangerBorder = true;
         }
         this.setState({errors: error});
@@ -78,6 +79,12 @@ class Edit extends Component {
         });
     };
 
+    onHandleChangeSwitch = (name, value) => {
+        this.setState({
+            [name]: value
+        });
+    };
+
     handleSubmit = (event) => {
         if (this.handleValidation()) {
             this.props.onEditItem(this.state);
@@ -89,7 +96,7 @@ class Edit extends Component {
         let post = this.props.post;
         this.setState({errors:{title: '', content: '', author: ''}});
         this.setState({...post});
-    }
+    };
 
     render() {
         let {errors} = this.state;
@@ -156,14 +163,9 @@ class Edit extends Component {
 
                     <div className={"form-check form-check-inline p-3"}>
                         <label className={"form-check-label"}>Active status &nbsp;</label>
-                        <input
-                            className={"form-check-input"}
-                            type={"checkbox"}
-                            name={"active"}
-                            onChange={this.handleChange}
-                            value={this.state.active}
-                            checked={this.state.active}
-                        />
+                        <Switch
+                            defaultChecked={this.state.active}
+                            onChange={this.onHandleChangeSwitch.bind(this, "active")}/>
                     </div>
 
                     <hr/>
