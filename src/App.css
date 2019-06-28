@@ -34,10 +34,16 @@
     display: block;
     transition: 0.3s;
 }
+
+.ant-switch{
+    margin-left: 5px !important;
+}
+
 .active {
     background-color: royalblue;
     color: black;
 }
+
 .sidenav a:hover {
     color: gold;
     background-color: rgba(0,135,255,0.3);

@@ -207,7 +207,7 @@ class App extends Component {
                             </NavLink>
                             <NavLink
                                 to="/list"
-                                activeClassName={"active"}><i className="fas fa-list" style={{fontSize: '18px'}}/>List
+                                activeClassName={"active"}><i className="fas fa-list" style={{fontSize: '18px'}}/> List
                             </NavLink>
                             <NavLink
                                 to="/add"
