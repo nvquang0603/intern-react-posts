@@ -6,79 +6,11 @@ import Add from "./components/Add.js";
 import Edit from "./components/Edit.js";
 import {BrowserRouter, Route, NavLink} from "react-router-dom";
 import ReactNotification from "react-notifications-component";
-import "react-notifications-component/dist/theme.css";
+import {showNotification} from './common/Notification'
+import Constant from './common/Constant'
+import DataDefault from './common/Data'
 
-const DEFAULT_POSTS = [
-    {
-        id: 1,
-        title: "Post 1",
-        content: "This is the content of post 1",
-        author: "Nam Giang",
-        active: false
-    },
-    {
-        id: 2,
-        title: "Post 2",
-        content: "This is the content of post 2",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 3,
-        title: "Post 3",
-        content: "This is the content of post 3",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 4,
-        title: "Post 4",
-        content: "This is the content of post 4",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 5,
-        title: "Post 5",
-        content: "This is the content of post 5",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 6,
-        title: "Post 6",
-        content: "This is the content of post 6",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 7,
-        title: "Post 7",
-        content: "This is the content of post 7",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 8,
-        title: "Post 8",
-        content: "This is the content of post 8",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 9,
-        title: "Post 9",
-        content: "This is the content of post 9",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 10,
-        title: "Post 10",
-        content: "This is the content of post 10",
-        author: "Nam Giang",
-        active: true
-    }];
+const DEFAULT_POSTS = DataDefault.DATA;
 
 class App extends Component {
     constructor(props) {
@@ -89,53 +21,22 @@ class App extends Component {
             errors: {},
             version: 1,
         };
-        this.editNotification = this.editNotification.bind(this);
-        this.successAddNotification = this.successAddNotification.bind(this);
+
         this.notificationDOMRef = React.createRef();
         this.filterUser = this.filterUser.bind(this);
         this.resetTable = this.resetTable.bind(this);
     }
 
     successAddNotification() {
-        this.notificationDOMRef.current.addNotification({
-            title: "Success",
-            message: "New post has been added!",
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {duration: 2000},
-            dismissable: {click: true}
-        });
+        showNotification(this, Constant.NOTIFICATION.SUCCESS, 'success', 'The post has been added!')
     }
 
     editNotification() {
-        this.notificationDOMRef.current.addNotification({
-            title: "Success",
-            message: "The post has been updated!",
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {duration: 2000},
-            dismissable: {click: true}
-        });
+        showNotification(this, Constant.NOTIFICATION.SUCCESS, 'success', 'The post has been updated!');
     }
 
     deleteNotification() {
-        this.notificationDOMRef.current.addNotification({
-            title: "Deleted!",
-            message: "The post has been deleted!",
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {duration: 2000},
-            dismissable: {click: true}
-        });
+        showNotification(this, Constant.NOTIFICATION.DELETE, 'success', 'The post has been deteted!');
     }
 
     openNav = () => {

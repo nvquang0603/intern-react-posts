@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
-// import { Switch } from 'antd';
+import {Switch} from 'antd';
 import 'antd/dist/antd.css';
+import {showNotification} from '../common/Notification';
+import Constant from "../common/Constant";
 
 class AddPost extends Component {
     constructor(props) {
@@ -13,13 +15,14 @@ class AddPost extends Component {
                 content: '',
                 author: '',
                 active: false,
-                errors: {}
-            }
+            },
+            errors: {}
         };
+        this.notificationDOMRef = React.createRef();
     }
 
     validation = () => {
-        let datas = this.state;
+        let datas = this.state.data;
         let error = {};
         let validation = true;
         if (!datas['title'] || datas['title'] === "") {
@@ -35,9 +38,8 @@ class AddPost extends Component {
             error['author'] = "Author is required!"
         }
         this.setState({errors: error});
-        console.log(error);
         return validation;
-    }
+    };
 
     componentWillMount() {
         this.setState({
@@ -53,6 +55,15 @@ class AddPost extends Component {
             }
         });
     };
+    onHandleChangeSwitch = (name, value) => {
+        this.setState({
+            data: {
+                ...this.state.data,
+                [name]: value
+            }
+        });
+    };
+
     onSubmit = async () => {
         await this.setState({lstPosts: [...this.state.lstPosts, this.state.data]});
         if (this.validation()) {
@@ -65,7 +76,7 @@ class AddPost extends Component {
     cancel = () => {
         alert('Adding new post has been canceled!');
         this.props.history.push('/list');
-    }
+    };
 
     render() {
         return (
@@ -88,7 +99,7 @@ class AddPost extends Component {
                                        name={"title"}
                                 />
                             </div>
-                            {/*<span style={{color: "red"}}>{this.state.errors["title"]}</span>*/}
+                            <span style={{color: "red"}}>{this.state.errors["title"]}</span>
                         </div>
                         <div className="col-12">
                             <div className="input-group mb-3 ">
@@ -105,6 +116,7 @@ class AddPost extends Component {
                                 <span
                                     className="glyphicon glyphicon-filter"/>
                             </div>
+                            <span style={{color: "red"}}>{this.state.errors["content"]}</span>
                         </div>
                         <div className="col-6">
                             <div className="input-group mb-3">
@@ -120,15 +132,12 @@ class AddPost extends Component {
                                 <span
                                     className="glyphicon glyphicon-filter"/>
                             </div>
+                            <span style={{color: "red"}}>{this.state.errors["author"]}</span>
                         </div>
                         <div className="col-6">
-                            <label>Active status:</label>
-                            <input type="checkbox"
-                                   onChange={this.onHandleChange.bind(this, "active")}
-                                   name="active"
-                                   className={"checkbox"}
-                            />
-                            {/*<Switch defaultUnChecked onChange={this.onHandleChange.bind(this, "active")}/>*/}
+                            <label style={{fontSize: '15px', fontWeight:'bold' }}>Active status:</label>
+                            <Switch
+                                onChange={this.onHandleChangeSwitch.bind(this, "active")}/>
                         </div>
                         <hr/>
                     </form>
@@ -136,12 +145,12 @@ class AddPost extends Component {
                         <button
                             onClick={this.onSubmit}
                             className="btn btn-success btnadd">
-                            <i className="fas fa-folder-plus" style={{fontSize: '18px'}}/> Add
+                            <i className="fas fa-plus" style={{fontSize: '18px'}}/> Add
                         </button>
                         <button
                             onClick={this.cancel}
                             className="btn btn-danger btnadd">
-                            <i className="fas fa-eraser"
+                            <i className="fas fa-times"
                                style={{fontSize: '18px'}}/> Cancel
                         </button>
                     </div>

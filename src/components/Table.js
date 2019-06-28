@@ -36,7 +36,7 @@ class Table extends Component {
                                 </td>
                                 <td>
                                     <div className="form-group">
-                                        <Link to={`/${post.id}/edit`} className="btn btn-warning btn-sm font-weight-bold" onClick={this.handleEdit.bind(this, post)}>Edit</Link>
+                                        <Link to={`/${post.id}/edit`} className="btn btn-primary btn-sm font-weight-bold" onClick={this.handleEdit.bind(this, post)}>Edit</Link>
                                         <button className="btn btn-danger btn-sm ml-2 font-weight-bold" onClick={this.handleDelete.bind(this, post.id)}>Delete</button>
                                     </div>
                                 </td>

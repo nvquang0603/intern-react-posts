@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
+import {Switch} from "antd";
 
 class Edit extends Component {
     constructor(props) {
@@ -65,6 +66,12 @@ class Edit extends Component {
         this.setState({...post});
     }
 
+    onHandleChangeSwitch = (name, value) => {
+        this.setState({
+            [name]: value
+        });
+    };
+
     render() {
         return (
             <div>
@@ -121,14 +128,9 @@ class Edit extends Component {
 
                     <div className={"form-check form-check-inline p-3"}>
                         <label className={"form-check-label"}>Active status &nbsp;</label>
-                        <input
-                            className={"form-check-input"}
-                            type={"checkbox"}
-                            name={"active"}
-                            onChange={this.handleChange}
-                            value={this.state.active}
-                            checked={this.state.active}
-                        />
+                        <Switch
+                            defaultChecked={this.state.active}
+                            onChange={this.onHandleChangeSwitch.bind(this, "active")}/>
                     </div>
 
                     <hr/>
@@ -139,7 +141,7 @@ class Edit extends Component {
                             className={"btn btn-success mr-2"}
                             onClick={this.handleSubmit.bind(this)}
                         >
-                            <i className={"far fa-paper-plane"} style={{fontSize: '18px'}}/>&nbsp;
+                            <i className={"fas fa-check"} style={{fontSize: '18px'}}/>&nbsp;
                             Submit
                         </button>
                         <button
@@ -147,7 +149,7 @@ class Edit extends Component {
                             className={"btn btn-danger"}
                             onClick={this.handleReset}
                         >
-                            <i className={"fas fa-eraser"} style={{fontSize: '18px'}}/>&nbsp;
+                            <i className={"fas fa-undo"} style={{fontSize: '18px'}}/>&nbsp;
                             Reset
                         </button>
                     </div>

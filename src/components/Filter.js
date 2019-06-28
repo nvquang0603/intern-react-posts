@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Switch} from "antd";
 
 class Filter extends Component {
     constructor(props) {
@@ -13,28 +14,29 @@ class Filter extends Component {
     }
 
     handleChange = (event) => {
-        console.log("handleChange");
         let target = event.target;
         let name = target.name;
-        let value = target.type === 'checkbox' ? target.checked : target.value;
         this.setState({
-            [name]: value
+            [name]: target.value
         })
     };
 
     handleSubmit = (event) => {
-        console.log("handleSubmit");
         this.props.filterUser({...this.state});
     };
 
     handleReset = (event) => {
-        console.log("handleReset");
         this.setState({
             filterTitle: '',
             filterAuthor: '',
             filterActive: false
         });
         this.props.resetTable()
+    };
+    onHandleChangeSwitch = (name, value) => {
+        this.setState({
+            [name]: value
+        })
     };
 
     render() {
@@ -73,20 +75,14 @@ class Filter extends Component {
                     </div>
                     <div className="col-4 form-check form-check-inline">
                         <label className={"form-check-label font-weight-bold"} htmlFor={"filterActive"}>
-                            <input
-                                type={'checkbox'}
-                                className={"form-check-input"}
-                                name={"filterActive"}
-                                value={this.state.filterActive}
-                                checked={this.state.filterActive}
-                                onChange={this.handleChange}
-                            /> Active</label> &nbsp;
-                        <button
-                            className="btn btn-outline-warning mx-2"
-                            onClick={this.handleSubmit}
-                        ><i className="fas fa-search text-white" /></button>
+                            <Switch
+                                onChange={this.onHandleChangeSwitch.bind(this, "filterActive")}/> Active</label> &nbsp;
                         <button
                             className="btn btn-outline-primary mx-2"
+                            onClick={this.handleSubmit}
+                        ><i className="fas fa-search text-white"/></button>
+                        <button
+                            className="btn btn-outline-warning mx-2"
                             onClick={this.handleReset}
                         ><i className="fas fa-undo text-white"/></button>
                     </div>

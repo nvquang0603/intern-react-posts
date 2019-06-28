@@ -39,6 +39,9 @@ button{
     display: block;
     transition: 0.3s;
 }
+.ant-switch{
+    margin-left: 5px !important;
+}
 .active {
     background-color: #2E2C2C;
     color: green;

@@ -32,7 +32,6 @@ class List extends Component {
 
     render() {
         let {filteredPost} = this.state;
-        console.log("render ==> ", filteredPost);
         return (
             <div>
                 <div className="listTopics">
