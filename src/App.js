@@ -1,89 +1,18 @@
 import React, {Component} from 'react';
 import './App.css';
 import Banner from "./Banner";
-
 import List from "./components/List.js";
 import Add from "./components/Add.js";
 import Edit from "./components/Edit.js";
-
 import {BrowserRouter, Route, NavLink} from "react-router-dom";
-
 import ReactNotification from "react-notifications-component";
-import "react-notifications-component/dist/theme.css";
+import {showNotification} from './common/Notification'
+import Constant from './common/Constant'
+import DataDefault from './common/Data'
+import Home from "./components/Home";
 
 import PropTypes from 'prop-types';
-
-const DEFAULT_POSTS = [
-    {
-        id: 1,
-        title: "Post 1",
-        content: "This is the content of post 1",
-        author: "Nam Giang",
-        active: false
-    },
-    {
-        id: 2,
-        title: "Post 2",
-        content: "This is the content of post 2",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 3,
-        title: "Post 3",
-        content: "This is the content of post 3",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 4,
-        title: "Post 4",
-        content: "This is the content of post 4",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 5,
-        title: "Post 5",
-        content: "This is the content of post 5",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 6,
-        title: "Post 6",
-        content: "This is the content of post 6",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 7,
-        title: "Post 7",
-        content: "This is the content of post 7",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 8,
-        title: "Post 8",
-        content: "This is the content of post 8",
-        author: "Nam Giang",
-        active: true
-    },
-    {
-        id: 9,
-        title: "Post 9",
-        content: "This is the content of post 9",
-        author: "Văn Quang",
-        active: true
-    },
-    {
-        id: 10,
-        title: "Post 10",
-        content: "This is the content of post 10",
-        author: "Nam Giang",
-        active: true
-    }];
+const DEFAULT_POSTS = DataDefault.DATA;
 
 class App extends Component {
     constructor(props) {
@@ -100,36 +29,23 @@ class App extends Component {
             errors: {},
             version: 1,
         };
+
         this.notificationDOMRef = React.createRef();
-    };
+        this.filterUser = this.filterUser.bind(this);
+        this.resetTable = this.resetTable.bind(this);
+    }
+
+    successAddNotification() {
+        showNotification(this, Constant.NOTIFICATION.SUCCESS, 'success', 'The post has been added!')
+    }
 
     editNotification() {
-        this.notificationDOMRef.current.addNotification({
-            title: "Done",
-            message: "Your post has been edited",
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {duration: 2000},
-            dismissable: {click: true}
-        });
-    };
+        showNotification(this, Constant.NOTIFICATION.SUCCESS, 'success', 'The post has been updated!');
+    }
 
-    deleteNotification(title) {
-        this.notificationDOMRef.current.addNotification({
-            title: "Done",
-            message: 'Your post "' + title + '" has been deleted',
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {duration: 2000},
-            dismissable: {click: true}
-        });
-    };
+    deleteNotification() {
+        showNotification(this, Constant.NOTIFICATION.DELETE, 'success', 'The post has been deteted!');
+    }
 
     openNav = () => {
         document.getElementById("mySidenav").style.width = "250px";
@@ -145,6 +61,7 @@ class App extends Component {
             posts: data,
             filteredPost: data
         });
+        this.successAddNotification();
     };
 
     onEditItem(itemInput) {
@@ -166,31 +83,44 @@ class App extends Component {
         this.setState({
             post,
         });
-    };
+    }
 
-    onDelete(post) {
+    onDelete(id) {
         let prevItems = this.state.posts;
         let prevFilteredItems = this.state.filteredPost;
         let posts = prevItems.filter((item) => {
-            return item.id !== post.id
+            return item.id !== id
         });
         let filteredPost = prevFilteredItems.filter((item) => {
-            return item.id !== post.id
+            return item.id !== id
         });
         this.setState({
             posts,
             filteredPost
         });
-        this.deleteNotification(post.title);
-    };
+        this.deleteNotification();
+    }
 
     componentWillMount() {
         this.setState({
             filteredPost: [...this.state.posts],
             editState: false
-        });
+        })
+    }
 
+    filterUser = (post) => {
+        let {posts} = this.state;
+        let updatedList = posts.filter((item) => {
+            return item.title.toLowerCase().includes(post.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(post.filterAuthor.toLowerCase()) && item.active === post.filterActive
+        });
+        this.setState({filteredPost: updatedList});
     };
+
+    resetTable() {
+        this.setState({
+            filteredPost: [...this.state.posts]
+        });
+    }
 
     render() {
         return (
@@ -200,19 +130,13 @@ class App extends Component {
                         <div id="mySidenav" className="sidenav">
                             <h3 className="mainTitle text-center">MENU</h3>
                             <button className="closebtn btn text-white" onClick={() => this.closeNav()}>×</button>
-                            <NavLink
-                                exact to="/"
-                                activeClassName={"active"}>
-                                <i className="fas fa-home" style={{fontSize: '18px'}}/> Home
-                            </NavLink>
-                            <NavLink
-                                to="/list"
-                                activeClassName={"active"}><i className="fas fa-list" style={{fontSize: '18px'}}/> List
-                            </NavLink>
-                            <NavLink
-                                to="/add"
-                                activeClassName={"active"}><i className="fas fa-plus-circle" style={{fontSize: '18px'}}/> Add new post
-                            </NavLink>
+                            <NavLink exact to="/" activeClassName={"active"}><i className="fas fa-home"
+                                                                                style={{fontSize: '18px'}}/> Home</NavLink>
+                            <NavLink to="/list" activeClassName={"active"}><i className="fas fa-list"
+                                                                              style={{fontSize: '18px'}}/> List</NavLink>
+                            <NavLink to="/add" activeClassName={"active"}><i className="fas fa-plus-circle"
+                                                                             style={{fontSize: '18px'}}/> Add new
+                                post</NavLink>
                         </div>
                         <br/>
                         <div id="main">
@@ -223,18 +147,19 @@ class App extends Component {
                             </div>
                             <span style={{fontSize: '30px', cursor: 'pointer'}}
                                   onClick={() => this.openNav()} className="mainTitle">☰MENU</span>
-                            <Route exact path="/" render={() => (
-                                <h2 className="mainTitle p-5 d-flex justify-content-center"> Hello Admin</h2>)}/>
+                            <Route exact path="/" component={() => <Home listPosts={this.state.posts}/>}/>
                             <Route path="/list" component={(props) =>
                                 <List
                                     version={this.state.version}
                                     listPosts={this.state.filteredPost}
                                     onDelete={this.onDelete.bind(this)}
                                     onEdit={this.onEdit.bind(this)}
+                                    filterUser={this.filterUser}
+                                    resetTable={this.resetTable}
                                 />}/>
                             <Route path="/add"
                                    component={() => <Add onSetPost={this.onSetPost}
-                                                         listPosts={this.state.filteredPost}/>}/>
+                                                         listPosts={this.state.posts}/>}/>
                             <Route path="/:id/edit" component={() => <Edit post={this.state.post}
                                                                            onEditItem={this.onEditItem.bind(this)}/>}/>
                         </div>
@@ -242,7 +167,7 @@ class App extends Component {
                 </div>
             </div>
         );
-    };
+    }
 }
 App.propTypes = {
 
