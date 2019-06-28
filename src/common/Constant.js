@@ -1,6 +1,6 @@
 export default {
     NOTIFICATION:{
-        DELETE:'Delete',
-        SUCCESS:'Success'
+        DELETE:'DELETE!',
+        SUCCESS:'SUCCESS!'
     }
 }

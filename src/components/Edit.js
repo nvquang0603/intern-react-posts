@@ -129,7 +129,7 @@ class Edit extends Component {
                     <div className={"form-check form-check-inline p-3"}>
                         <label className={"form-check-label"}>Active status &nbsp;</label>
                         <Switch
-                            defaultChecked={this.state.active}
+                            checked={this.state.active}
                             onChange={this.onHandleChangeSwitch.bind(this, "active")}/>
                     </div>
 

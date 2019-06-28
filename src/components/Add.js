@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {Switch} from 'antd';
 import 'antd/dist/antd.css';
-import {showNotification} from '../common/Notification';
-import Constant from "../common/Constant";
 
 class AddPost extends Component {
     constructor(props) {

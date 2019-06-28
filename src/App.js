@@ -9,6 +9,7 @@ import ReactNotification from "react-notifications-component";
 import {showNotification} from './common/Notification'
 import Constant from './common/Constant'
 import DataDefault from './common/Data'
+import Home from "./components/Home";
 
 const DEFAULT_POSTS = DataDefault.DATA;
 
@@ -138,8 +139,7 @@ class App extends Component {
                             </div>
                             <span style={{fontSize: '30px', cursor: 'pointer'}}
                                   onClick={() => this.openNav()} className="mainTitle">☰MENU</span>
-                            <Route exact path="/" render={() => (
-                                <h2 className="mainTitle p-5 d-flex justify-content-center"> Hello Admin</h2>)}/>
+                            <Route exact path="/" component={() => <Home listPosts={this.state.posts}/>}/>
                             <Route path="/list" component={(props) =>
                                 <List
                                     version={this.state.version}
