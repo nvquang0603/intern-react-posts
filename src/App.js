@@ -95,7 +95,7 @@ class App extends Component {
                 title: '',
                 content: '',
                 author: '',
-                active: 1
+                active: false
             },
             errors: {},
             version: 1,
@@ -158,7 +158,7 @@ class App extends Component {
             }
             return item;
         });
-        this.setState({post: {id: '', title: '', content: '', author: '', active: 1}, posts: newPost});
+        this.setState({post: {id: '', title: '', content: '', author: '', active: false}, posts: newPost});
         this.editNotification();
     };
 

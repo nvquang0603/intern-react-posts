@@ -94,7 +94,20 @@ class Edit extends Component {
 
     handleReset() {
         let post = this.props.post;
-        this.setState({errors:{title: '', content: '', author: ''}});
+        this.setState({errors:{
+                title: {
+                    dangerBorder: false,
+                    message: ''
+                },
+                content: {
+                    dangerBorder: false,
+                    message: ''
+                },
+                author: {
+                    dangerBorder: false,
+                    message: ''
+                }
+            }});
         this.setState({...post});
     };
 
@@ -164,7 +177,7 @@ class Edit extends Component {
                     <div className={"form-check form-check-inline p-3"}>
                         <label className={"form-check-label"}>Active status &nbsp;</label>
                         <Switch
-                            defaultChecked={this.state.active}
+                            checked={this.state.active}
                             onChange={this.onHandleChangeSwitch.bind(this, "active")}/>
                     </div>
 
