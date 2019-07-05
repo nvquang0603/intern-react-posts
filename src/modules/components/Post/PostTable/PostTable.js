@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
+import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 
-class Table extends Component {
+class PostTable extends Component {
     handleDelete(post) {
         let confirmDelete = window.confirm('Are you sure? Press Enter or click Ok to delete');
         if ( confirmDelete ) {
@@ -50,15 +51,25 @@ class Table extends Component {
         )
     }
 }
-Table.propTypes = {
+
+const mapStateToProps = (state) => {
+    return {
+        ...state.todos,
+        ...state.todo
+    };
+};
+
+PostTable.propTypes = {
     listPosts: PropTypes.array,
     onEdit: PropTypes.func,
     onDelete: PropTypes.func
 };
 
-Table.defaultProps = {
+PostTable.defaultProps = {
     listPosts: [],
     onEdit: () => {},
     onDelete: () => {}
 };
-export default Table;
+export default connect(
+    mapStateToProps
+)(PostTable);

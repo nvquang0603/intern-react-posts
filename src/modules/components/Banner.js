@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import pic1 from './resources/images/708166.jpg';
-import pic2 from './resources/images/808386.jpg';
-import pic3 from './resources/images/587539.jpg';
+import pic1 from '../../resources/images/708166.jpg';
+import pic2 from '../../resources/images/808386.jpg';
+import pic3 from '../../resources/images/587539.jpg';
 import PropTypes from 'prop-types';
 
 class Banner extends Component {

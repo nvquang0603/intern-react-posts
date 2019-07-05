@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link, Route } from "react-router";
 import {NavLink} from "react-router-dom";
 
 const menus = [
@@ -14,7 +13,7 @@ const menus = [
         exact: false
     },
     {
-        name: 'Add new',
+        name: 'Add new post',
         to: '/add',
         exact: false
     }
@@ -34,7 +33,7 @@ class Menu extends Component {
                         to={menu.to}
                         activeClassName={"active"}
                     >
-                        <i className="fas fa-home" style={{fontSize: '18px'}}/> {menu.name}
+                        {menu.name}
                     </NavLink>
                 )
             })

@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
 import './App.css';
-import Menu from './components/Menu';
-import Banner from "./Banner";
-import List from "./components/List.js";
-import Add from "./components/Add.js";
-import Edit from "./components/Edit.js";
+import Menu from './modules/components/Menu';
+import Banner from "./modules/components/Banner";
+import Index from "./modules/components/Post/List";
+import Add from "./modules/components/Post/Add.js";
+import Edit from "./modules/components/Post/Edit.js";
+import Constant from './common/Constant';
+import DataDefault from './common/Data';
+import Home from "./modules/components/Home";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import ReactNotification from "react-notifications-component";
 import {showNotification} from './common/Notification';
-import Constant from './common/Constant';
-import DataDefault from './common/Data';
-import Home from "./components/Home";
-
 import PropTypes from 'prop-types';
+
 const DEFAULT_POSTS = DataDefault.DATA;
 
 class App extends Component {
@@ -138,7 +138,7 @@ class App extends Component {
                             <Switch>
                                 <Route exact path="/" component={() => <Home listPosts={this.state.posts}/>}/>
                                 <Route path="/list" component={() =>
-                                    <List
+                                    <Index
                                         version={this.state.version}
                                         listPosts={this.state.filteredPost}
                                         onDelete={this.onDelete.bind(this)}

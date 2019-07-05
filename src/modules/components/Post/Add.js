@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import List from "./List";
+import Index from "./List";
 import {Switch} from 'antd';
 import 'antd/dist/antd.css';
 
@@ -160,12 +160,12 @@ class AddPost extends Component {
         );
     }
 }
-List.propTypes = {
+Index.propTypes = {
     listPosts: PropTypes.array,
     onSetPost: PropTypes.func,
 };
 
-List.defaultProps = {
+Index.defaultProps = {
     listPosts: [],
     onSetPost: () => {},
 };

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Filter from '../components/Filter';
-import Table from '../components/Table';
+import PostFilter from './PostFilter/PostFilter';
+import PostTable from './PostTable/PostTable';
 import PropTypes from 'prop-types';
 
 class List extends Component {
@@ -45,13 +45,14 @@ class List extends Component {
             <div>
                 <div className="listTopics">
                     <h2 className="mainTitle text-center">List Topics</h2>
-                    <Filter filterUser={this.filterUser.bind(this)} resetTable={this.resetTable.bind(this)}/>
-                    <Table listPosts={filteredPost} onDelete={this.props.onDelete} onEdit={this.props.onEdit}/>
+                    <PostFilter filterUser={this.filterUser.bind(this)} resetTable={this.resetTable.bind(this)}/>
+                    <PostTable listPosts={filteredPost} onDelete={this.props.onDelete} onEdit={this.props.onEdit}/>
                 </div>
             </div>
         );
     }
 }
+
 
 List.propTypes = {
     version: PropTypes.number,

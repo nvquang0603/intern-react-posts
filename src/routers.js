@@ -1,9 +1,9 @@
 import React from 'react';
-import List from "./components/List.js";
-import Add from "./components/Add.js";
-import Edit from "./components/Edit.js";
-import Home from "./components/Home";
-const routes = [
+import Index from "./modules/components/Post/List";
+import Add from "./modules/components/Post/Add.js";
+import Edit from "./modules/components/Post/Edit.js";
+import Home from "./modules/components/Home";
+const routers = [
         {
             path: '/',
             exact: true,
@@ -12,7 +12,7 @@ const routes = [
         {
             path: '/list',
             exact: false,
-            main: () => <List
+            main: () => <Index
                 version={this.props.version}
                 listPosts={this.props.filteredPost}
                 onDelete={this.onDelete.bind(this)}
@@ -35,4 +35,4 @@ const routes = [
                               onEditItem={this.onEditItem.bind(this)}/>
         }
     ];
-export default routes;
+export default routers;

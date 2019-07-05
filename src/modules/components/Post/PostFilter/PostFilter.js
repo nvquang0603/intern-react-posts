@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-class Filter extends Component {
+class PostFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -94,12 +94,12 @@ class Filter extends Component {
         );
     }
 }
-Filter.propTypes = {
+PostFilter.propTypes = {
     filterUser: PropTypes.func,
     resetTable: PropTypes.func
 };
-Filter.defaultProps = {
+PostFilter.defaultProps = {
     filterUser: () => {},
     resetTable: () => {}
 };
-export default Filter;
+export default PostFilter;
