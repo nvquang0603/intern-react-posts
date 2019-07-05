@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import './App.css';
+import Menu from './components/Menu';
 import Banner from "./Banner";
 import List from "./components/List.js";
 import Add from "./components/Add.js";
 import Edit from "./components/Edit.js";
-import {BrowserRouter, Route, NavLink} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import ReactNotification from "react-notifications-component";
-import {showNotification} from './common/Notification'
-import Constant from './common/Constant'
-import DataDefault from './common/Data'
+import {showNotification} from './common/Notification';
+import Constant from './common/Constant';
+import DataDefault from './common/Data';
 import Home from "./components/Home";
 
 import PropTypes from 'prop-types';
@@ -47,14 +48,12 @@ class App extends Component {
         showNotification(this, Constant.NOTIFICATION.DELETE, 'success', 'The post has been deteted!');
     }
 
-    openNav = () => {
-        document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
-    };
-
-    closeNav = () => {
-        document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
+    toggleNav = (navWidth) => {
+        if (document.getElementById("mySidenav").style.width === "0px" || document.getElementById("mySidenav").style.width === "") {
+            document.getElementById("mySidenav").style.width = navWidth;
+        } else {
+            document.getElementById("mySidenav").style.width = "0px";
+        }
     };
     onSetPost = (data) => {
         this.setState({
@@ -85,14 +84,14 @@ class App extends Component {
         });
     }
 
-    onDelete(id) {
+    onDelete(post) {
         let prevItems = this.state.posts;
         let prevFilteredItems = this.state.filteredPost;
         let posts = prevItems.filter((item) => {
-            return item.id !== id
+            return item.id !== post.id
         });
         let filteredPost = prevFilteredItems.filter((item) => {
-            return item.id !== id
+            return item.id !== post.id
         });
         this.setState({
             posts,
@@ -127,41 +126,34 @@ class App extends Component {
             <div className="App">
                 <div className="container">
                     <BrowserRouter>
-                        <div id="mySidenav" className="sidenav">
-                            <h3 className="mainTitle text-center">MENU</h3>
-                            <button className="closebtn btn text-white" onClick={() => this.closeNav()}>×</button>
-                            <NavLink exact to="/" activeClassName={"active"}><i className="fas fa-home"
-                                                                                style={{fontSize: '18px'}}/> Home</NavLink>
-                            <NavLink to="/list" activeClassName={"active"}><i className="fas fa-list"
-                                                                              style={{fontSize: '18px'}}/> List</NavLink>
-                            <NavLink to="/add" activeClassName={"active"}><i className="fas fa-plus-circle"
-                                                                             style={{fontSize: '18px'}}/> Add new
-                                post</NavLink>
-                        </div>
+                        <Menu />
                         <br/>
                         <div id="main">
-
                             <Banner/>
-                            <div className="app-content">
-                                <ReactNotification ref={this.notificationDOMRef}/>
-                            </div>
                             <span style={{fontSize: '30px', cursor: 'pointer'}}
-                                  onClick={() => this.openNav()} className="mainTitle">☰MENU</span>
-                            <Route exact path="/" component={() => <Home listPosts={this.state.posts}/>}/>
-                            <Route path="/list" component={(props) =>
-                                <List
-                                    version={this.state.version}
-                                    listPosts={this.state.filteredPost}
-                                    onDelete={this.onDelete.bind(this)}
-                                    onEdit={this.onEdit.bind(this)}
-                                    filterUser={this.filterUser}
-                                    resetTable={this.resetTable}
-                                />}/>
-                            <Route path="/add"
-                                   component={() => <Add onSetPost={this.onSetPost}
-                                                         listPosts={this.state.posts}/>}/>
-                            <Route path="/:id/edit" component={() => <Edit post={this.state.post}
-                                                                           onEditItem={this.onEditItem.bind(this)}/>}/>
+                                  onClick={() => this.toggleNav("250px")} className="mainTitle">☰MENU</span>
+                            <div className="app-content">
+                                <ReactNotification ref={ this.notificationDOMRef }/>
+                            </div>
+                            <Switch>
+                                <Route exact path="/" component={() => <Home listPosts={this.state.posts}/>}/>
+                                <Route path="/list" component={() =>
+                                    <List
+                                        version={this.state.version}
+                                        listPosts={this.state.filteredPost}
+                                        onDelete={this.onDelete.bind(this)}
+                                        onEdit={this.onEdit.bind(this)}
+                                        filterUser={this.filterUser}
+                                        resetTable={this.resetTable}
+                                    />}
+                                />
+                                <Route path="/add"
+                                       component={() => <Add onSetPost={this.onSetPost}
+                                                             listPosts={this.state.posts}/>}/>
+                                <Route path="/:id/edit" component={() => <Edit post={this.state.post}
+                                                                               onEditItem={this.onEditItem.bind(this)}/>}/>
+                            </Switch>
+
                         </div>
                     </BrowserRouter>
                 </div>

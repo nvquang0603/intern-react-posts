@@ -5,6 +5,7 @@ class Home extends Component {
         return (
             this.props.listPosts.map(post => {
                 return (
+
                             <div key={post.id} className="card" style={{width: '18rem'}}>
                                 <div className="card-body">
                                     <h5 className="card-title">{post.title}</h5>
