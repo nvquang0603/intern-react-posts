@@ -29,6 +29,7 @@ class Menu extends Component {
             result = menus.map((menu, index) => {
                 return (
                     <NavLink
+                        key={index}
                         exact={menu.exact}
                         to={menu.to}
                         activeClassName={"active"}

@@ -1,10 +1,9 @@
-import { combineReducers} from "redux";
-import postListReducer from './modules/reducers/postList';
-import postFilterReducer from './modules/reducers/postFilter';
+import { combineReducers } from "redux";
+import postTableReducer from './modules/reducers/postTable';
+
 
 const rootReducer = combineReducers({
-    postListReducer,
-    postFilterReducer
+    postTableReducer
 });
 
 export default rootReducer;

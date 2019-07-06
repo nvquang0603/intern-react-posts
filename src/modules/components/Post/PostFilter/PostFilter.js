@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import * as actions from "../../../actions";
+import {connect} from "react-redux";
 
 class PostFilter extends Component {
     constructor(props) {
@@ -12,7 +14,15 @@ class PostFilter extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.posts !== prevProps.posts) {
+            this.setState({
+                filterTitle: '',
+                filterAuthor: '',
+                filterActive: 'all'
+            });
+        }
+    }
     handleChange = (event) => {
         let target = event.target;
         let name = target.name;
@@ -23,7 +33,7 @@ class PostFilter extends Component {
     };
 
     handleSubmit = (event) => {
-        this.props.filterUser({...this.state});
+        this.props.filterPost({...this.state});
     };
 
     handleReset = (event) => {
@@ -94,12 +104,29 @@ class PostFilter extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    let posts = state.postTableReducer.posts;
+    return {
+        posts
+    }
+};
+
+const mapDispatchToProps  = (dispatch, props) => {
+    return {
+        listPost: (posts) => {
+            dispatch(actions.listPost(posts))
+        }
+    }
+};
+
 PostFilter.propTypes = {
-    filterUser: PropTypes.func,
+    filterPost: PropTypes.func,
     resetTable: PropTypes.func
 };
-PostFilter.defaultProps = {
-    filterUser: () => {},
-    resetTable: () => {}
-};
-export default PostFilter;
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PostFilter);

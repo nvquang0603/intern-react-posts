@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PostFilter from './PostFilter/PostFilter';
 import PostTable from './PostTable/PostTable';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 
 class List extends Component {
     constructor(props) {
@@ -12,60 +13,58 @@ class List extends Component {
         };
     }
 
-    static getDerivedStateFromProps(props, preState) {
-        let newState = {...preState};
-        if (preState.version === 1 || props.version > preState.version) {
-            newState.filteredPost = props.listPosts;
-            newState.version = props.version;
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.posts !== prevProps.posts) {
+            this.setState({
+                filteredPost: this.props.posts
+            });
         }
+    };
 
-        return newState;
-    }
-
-    filterUser = (post) => {
-        let active = (post.filterActive === 'true');
-        let {listPosts} = this.props;
-        let updatedList = listPosts.filter((item) => {
-            return post.filterActive === 'all' ? item.title.toLowerCase().includes(post.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(post.filterAuthor.toLowerCase()) :
-                item.title.toLowerCase().includes(post.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(post.filterAuthor.toLowerCase()) && item.active === active
-    });
+    filterPost = (filter) => {
+        let active = (filter.filterActive === 'true');
+        let {posts} = this.props;
+        let updatedList = posts.filter((item) => {
+            return filter.filterActive === 'all' ? item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) :
+                item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) && item.active === active
+        });
 
         this.setState({filteredPost: updatedList, version: this.state.version + 1});
     };
-
     resetTable() {
         this.setState({
-            filteredPost: this.props.listPosts
+            filteredPost: this.props.posts
         });
     };
-
     render() {
-        let {filteredPost} = this.state;
         return (
             <div>
                 <div className="listTopics">
                     <h2 className="mainTitle text-center">List Topics</h2>
-                    <PostFilter filterUser={this.filterUser.bind(this)} resetTable={this.resetTable.bind(this)}/>
-                    <PostTable listPosts={filteredPost} onDelete={this.props.onDelete} onEdit={this.props.onEdit}/>
+                    <PostFilter filterPost={this.filterPost.bind(this)} resetTable={this.resetTable.bind(this)} />
+                    <PostTable posts={this.state.filteredPost} deleteNotification={this.props.deleteNotification.bind(this)}/>
                 </div>
             </div>
         );
     }
 }
 
+const mapStateToProps = (state) => {
+    let posts = state.postTableReducer.posts;
+    return {
+        posts: posts,
+    }
+};
 
 List.propTypes = {
     version: PropTypes.number,
-    listPosts: PropTypes.array,
-    onEdit: PropTypes.func,
-    onDelete: PropTypes.func
+    posts: PropTypes.array,
 };
-
 List.defaultProps = {
     version: 1,
-    listPosts: [],
-    onEdit: () => {},
-    onDelete: () => {}
 };
-
-export default List;
+export default connect(
+    mapStateToProps,
+    null
+)(List);

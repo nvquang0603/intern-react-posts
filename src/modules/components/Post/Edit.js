@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Switch} from "antd";
+import axios from 'axios';
 import 'antd/dist/antd.css';
+import {connect} from "react-redux";
+import * as actions from "../../actions";
+import {withRouter} from "react-router";
 class Edit extends Component {
     constructor(props) {
         super(props);
@@ -32,7 +35,7 @@ class Edit extends Component {
         this.handleReset = this.handleReset.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         let post = this.props.post;
         this.setState({...post});
     }
@@ -86,8 +89,18 @@ class Edit extends Component {
     };
 
     handleSubmit = (event) => {
+        let post = this.state;
+        let {title} = this.state;
+        let {content} = this.state;
+        let {author} = this.state;
+        let {active} = this.state;
         if (this.handleValidation()) {
-            this.props.onEditItem(this.state);
+            this.setState({post: {id: 0, text: ''}});
+            axios.put(`http://5d20186c3036a60014d68a1d.mockapi.io/posts/${post.id}`, { title, content, author, active })
+                .then(res => {
+                    this.props.saveEditPost(this.state);
+                    this.props.editNotification(post.id);
+                });
             this.props.history.push('/list');
         }
     };
@@ -112,6 +125,7 @@ class Edit extends Component {
     };
 
     render() {
+        console.log(this.state);
         let {errors} = this.state;
         return (
             <div>
@@ -207,6 +221,21 @@ class Edit extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    let posts = state.postTableReducer.posts;
+    let post = state.postTableReducer.post;
+    return {
+        posts: posts,
+        post: post
+    }
+};
+const mapDispatchToProps  = (dispatch, props) => {
+    return {
+        saveEditPost: (post) => {
+            dispatch(actions.saveEditPost(post))
+        }
+    }
+};
 Edit.propTypes = {
     post: PropTypes.object,
     onEditItem: PropTypes.func
@@ -215,4 +244,7 @@ Edit.defaultProps = {
     post: {},
     onEditItem: () => {}
 };
-export default withRouter(Edit);
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Edit));

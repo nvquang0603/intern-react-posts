@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Index from "./List";
+import List from "./List";
 import {Switch} from 'antd';
 import 'antd/dist/antd.css';
+import * as actions from "../../actions";
+import {connect} from "react-redux";
 
 class AddPost extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: {
-                id: this.props.listPosts.length + 1,
+                id: 0,
                 title: '',
                 content: '',
                 author: '',
@@ -64,13 +66,11 @@ class AddPost extends Component {
         });
     };
 
-    onSubmit = async () => {
-        await this.setState({lstPosts: [...this.state.lstPosts, this.state.data]});
+    onSubmit = (event) => {
         if (this.validation()) {
-            this.props.onSetPost(this.state.lstPosts);
+            this.props.addPost(this.state.data);
             this.props.history.push('/list');
         }
-
     };
 
     cancel = () => {
@@ -160,13 +160,31 @@ class AddPost extends Component {
         );
     }
 }
-Index.propTypes = {
+const mapStateToProps = (state) => {
+    let posts = state.postTableReducer.posts;
+    let post = state.postTableReducer.post;
+    return {
+        posts: posts,
+        post: post
+    }
+};
+const mapDispatchToProps  = (dispatch, props) => {
+    return {
+        addPost: (post) => {
+            dispatch(actions.addPost(post))
+        }
+    }
+};
+AddPost.propTypes = {
     listPosts: PropTypes.array,
     onSetPost: PropTypes.func,
 };
 
-Index.defaultProps = {
+AddPost.defaultProps = {
     listPosts: [],
     onSetPost: () => {},
 };
-export default withRouter(AddPost);
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddPost));

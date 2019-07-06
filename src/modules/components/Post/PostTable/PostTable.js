@@ -1,17 +1,33 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import { connect } from "react-redux";
+import axios from 'axios';
+import * as actions from "../../../actions";
 import PropTypes from 'prop-types';
+
 
 class PostTable extends Component {
     handleDelete(post) {
         let confirmDelete = window.confirm('Are you sure? Press Enter or click Ok to delete');
         if ( confirmDelete ) {
-            this.props.onDelete(post);
+            axios.delete(`http://5d20186c3036a60014d68a1d.mockapi.io/posts/${post.id}`)
+                .then(res => {
+                    this.props.deletePost(post);
+                    this.props.deleteNotification(post.id);
+                });
         }
     }
     handleEdit(post) {
-        this.props.onEdit(post);
+        this.props.editPost(post);
+    }
+
+    componentDidMount() {
+        axios.get(`http://5d20186c3036a60014d68a1d.mockapi.io/posts`)
+            .then(res => {
+                let posts = res.data;
+                this.props.listPost(posts);
+            })
+            .catch(error => console.log(error));
     }
     render() {
         return (
@@ -27,7 +43,7 @@ class PostTable extends Component {
                 </thead>
                 <tbody>
                 {
-                    this.props.listPosts.map(post => {
+                    this.props.posts.map(post => {
                         return (
                             <tr key={post.id}>
                                 <td className={"text-center"}>{post.id}</td>
@@ -52,24 +68,27 @@ class PostTable extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapDispatchToProps  = (dispatch, props) => {
     return {
-        ...state.todos,
-        ...state.todo
-    };
+        listPost: (posts) => {
+            dispatch(actions.listPost(posts))
+        },
+        deletePost: (post) => {
+            dispatch(actions.deletePost(post))
+        },
+        editPost: (post) => {
+            dispatch(actions.editPost(post))
+        }
+    }
 };
 
 PostTable.propTypes = {
-    listPosts: PropTypes.array,
+    posts: PropTypes.array,
     onEdit: PropTypes.func,
     onDelete: PropTypes.func
 };
 
-PostTable.defaultProps = {
-    listPosts: [],
-    onEdit: () => {},
-    onDelete: () => {}
-};
 export default connect(
-    mapStateToProps
+    null,
+    mapDispatchToProps
 )(PostTable);
