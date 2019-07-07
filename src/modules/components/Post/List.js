@@ -41,7 +41,7 @@ class List extends Component {
                 <div className="listTopics">
                     <h2 className="mainTitle text-center">List Topics</h2>
                     <PostFilter filterPost={this.filterPost.bind(this)} resetTable={this.resetTable.bind(this)} />
-                    <PostTable posts={this.state.filteredPost} deleteNotification={this.props.deleteNotification.bind(this)} fetching={this.props.fetching} error={this.props.error}/>
+                    <PostTable posts={this.state.filteredPost} deleteNotification={this.props.deleteNotification.bind(this)} fetching={this.props.fetching} deleted={this.props.deleted} error={this.props.error} deleting={this.props.deleting}/>
                 </div>
             </div>
         );
@@ -50,6 +50,8 @@ class List extends Component {
 
 const mapStateToProps = state => {
     return {
+        deleting: state.postTableReducer.deleting,
+        deleted: state.postTableReducer.deleted,
         fetching: state.postTableReducer.fetching,
         posts: state.postTableReducer.posts,
         error: state.postTableReducer.error

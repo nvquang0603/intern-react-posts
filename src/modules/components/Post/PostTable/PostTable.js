@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import { connect } from "react-redux";
-import axios from 'axios';
-import * as actions from "../../../actions";
 import PropTypes from 'prop-types';
 
 
@@ -10,19 +8,15 @@ class PostTable extends Component {
     handleDelete(post) {
         let confirmDelete = window.confirm('Are you sure? Press Enter or click Ok to delete');
         if ( confirmDelete ) {
-            axios.delete(`http://5d20186c3036a60014d68a1d.mockapi.io/posts/${post.id}`)
-                .then(res => {
-                    this.props.deletePost(post);
-                    this.props.deleteNotification(post.id);
-                });
+            this.props.deletePost(post);
+            if(this.props.fetching === false)  {
+                this.props.deleteNotification(post.id);
+            }
         }
     }
-    handleEdit(post) {
-        this.props.editPost(post);
-    };
 
     componentDidMount() {
-        this.props.fetchProducts();
+        this.props.fetchPost();
     };
 
     render() {
@@ -54,7 +48,7 @@ class PostTable extends Component {
                                     </td>
                                     <td className={"text-center"}>
                                         <div className="form-group">
-                                            <Link to={`/${post.id}/edit`} className="btn btn-warning btn-sm font-weight-bold" onClick={this.handleEdit.bind(this, post)}>Edit</Link>
+                                            <Link to={`/${post.id}/edit`} className="btn btn-warning btn-sm font-weight-bold">Edit</Link>
                                             <button className="btn btn-danger btn-sm ml-2 font-weight-bold" onClick={this.handleDelete.bind(this, post)}>Delete</button>
                                         </div>
                                     </td>
@@ -68,17 +62,21 @@ class PostTable extends Component {
         )
     }
 }
-
+const mapStateToProps = state => {
+    return {
+        deleting: state.postTableReducer.deleting,
+    };
+};
 const mapDispatchToProps  = (dispatch, props) => {
     return {
-        fetchProducts: () => {
+        fetchPost: () => {
             dispatch({ type: "API_CALL_REQUEST" })
         },
         deletePost: (post) => {
-            dispatch(actions.deletePost(post))
+            dispatch({ type: "API_CALL_DELETE_REQUEST", post })
         },
         editPost: (post) => {
-            dispatch(actions.editPost(post))
+            dispatch({ type: "API_CALL_EDIT_REQUEST", post })
         }
     }
 };
@@ -90,6 +88,6 @@ PostTable.propTypes = {
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(PostTable);

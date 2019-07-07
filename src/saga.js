@@ -1,30 +1,88 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import axios from "axios";
 
-// watcher saga: watches for actions dispatched to the store, starts worker saga
 export function* watcherSaga() {
     yield takeLatest("API_CALL_REQUEST", workerSaga);
+    yield takeLatest("API_CALL_DELETE_REQUEST", deleteSaga);
+    yield takeLatest("API_CALL_EDIT_REQUEST", editSaga);
+    yield takeLatest("API_CALL_SAVE_EDIT_REQUEST", saveEditSaga);
 }
 
-// function that makes the api request and returns a Promise for response
-function fetchProduct() {
+function fetchPost() {
     return axios({
         method: "GET",
         url: "http://5d20186c3036a60014d68a1d.mockapi.io/posts"
     });
 }
 
-// worker saga: makes the api call when watcher saga sees the action
+function editPost(action) {
+    return axios({
+        method: "GET",
+        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.post}`
+    });
+}
+
+function saveEditPost(action) {
+    return axios({
+        method: "PUT",
+        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.post.id}`,
+        data: {
+            title: action.post.title,
+            content: action.post.content,
+            author: action.post.author,
+            active: action.post.active
+        },
+    });
+}
+
+function deletePost(action) {
+    return axios({
+        method: "DELETE",
+        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.post.id}`,
+        data: action.post
+    });
+}
+
 function* workerSaga() {
     try {
-        const response = yield call(fetchProduct);
+        const response = yield call(fetchPost);
         const data = response.data;
-
-        // dispatch a success action to the store with the new dog
         yield put({ type: "API_CALL_SUCCESS", data });
 
     } catch (error) {
-        // dispatch a failure action to the store with the error
         yield put({ type: "API_CALL_FAILURE", error });
+    }
+}
+
+function* deleteSaga(action) {
+    try {
+        const response = yield call(deletePost, action);
+        const data = response.data;
+        yield put({ type: "API_CALL_DELETE_SUCCESS", data });
+
+    } catch (error) {
+        yield put({ type: "API_CALL_DELETE_FAILURE", error });
+    }
+}
+
+function* editSaga(action) {
+    try {
+        const response = yield call(editPost, action);
+        const data = response.data;
+        yield put({ type: "API_CALL_EDIT_SUCCESS", data });
+
+    } catch (error) {
+        yield put({ type: "API_CALL_EDIT_FAILURE", error });
+    }
+}
+
+function* saveEditSaga(action) {
+    try {
+        const response = yield call(saveEditPost, action);
+        const post = response.data;
+        yield put({ type: "API_CALL_SAVE_EDIT_SUCCESS", post });
+
+    } catch (error) {
+        yield put({ type: "API_CALL_EDIT_SAVE_FAILURE", error });
     }
 }

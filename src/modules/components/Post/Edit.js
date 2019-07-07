@@ -34,11 +34,22 @@ class Edit extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.post !== prevProps.post) {
+            this.setState({
+                id: this.props.post.id,
+                title: this.props.post.title,
+                content: this.props.post.content,
+                author: this.props.post.author,
+                active: this.props.post.active,
+            });
+        }
+    };
     componentDidMount() {
-        let post = this.props.post;
-        this.setState({...post});
+        this.props.editPost(this.props.match.params.id);
+
     }
+
     handleValidation = () => {
         let error = {
             title: {
@@ -90,18 +101,12 @@ class Edit extends Component {
 
     handleSubmit = (event) => {
         let post = this.state;
-        let {title} = this.state;
-        let {content} = this.state;
-        let {author} = this.state;
-        let {active} = this.state;
         if (this.handleValidation()) {
-            this.setState({post: {id: 0, text: ''}});
-            axios.put(`http://5d20186c3036a60014d68a1d.mockapi.io/posts/${post.id}`, { title, content, author, active })
-                .then(res => {
-                    this.props.saveEditPost(this.state);
-                    this.props.editNotification(post.id);
-                });
-            this.props.history.push('/list');
+            this.props.saveEditPost(this.state);
+            if (this.props.fetching === false) {
+                this.props.editNotification(post.id);
+                this.props.history.push('/list');
+            }
         }
     };
 
@@ -125,7 +130,6 @@ class Edit extends Component {
     };
 
     render() {
-        console.log(this.state);
         let {errors} = this.state;
         return (
             <div>
@@ -200,7 +204,7 @@ class Edit extends Component {
                     <div className="button-group text-center">
                         <button
                             type={"submit"}
-                            className={"btn btn-success mr-2"}
+                            className={errors.title.message !== '' || errors.content.message !== '' || errors.author.message !== '' ? "btn btn-success mr-2 disabled" : "btn btn-success mr-2"}
                             onClick={this.handleSubmit.bind(this)}
                         >
                             <i className={"far fa-paper-plane"} style={{fontSize: '18px'}}/>&nbsp;
@@ -222,28 +226,32 @@ class Edit extends Component {
     }
 }
 const mapStateToProps = (state) => {
-    let posts = state.postTableReducer.posts;
+    console.log(state);
     let post = state.postTableReducer.post;
+    let fetching = state.postTableReducer.fetching;
     return {
-        posts: posts,
-        post: post
+        post:
+            {
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                author: post.author,
+                active: post.active
+            },
+        fetching: fetching
     }
 };
 const mapDispatchToProps  = (dispatch, props) => {
     return {
         saveEditPost: (post) => {
-            dispatch(actions.saveEditPost(post))
+            dispatch({ type: "API_CALL_SAVE_EDIT_REQUEST", post })
+        },
+        editPost: (post) => {
+            dispatch({ type: "API_CALL_EDIT_REQUEST", post })
         }
     }
 };
-Edit.propTypes = {
-    post: PropTypes.object,
-    onEditItem: PropTypes.func
-};
-Edit.defaultProps = {
-    post: {},
-    onEditItem: () => {}
-};
+
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps

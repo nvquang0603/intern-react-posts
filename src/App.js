@@ -16,7 +16,6 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-
         this.deleteNotification = this.deleteNotification.bind(this);
         this.notificationDOMRef = React.createRef();
 
