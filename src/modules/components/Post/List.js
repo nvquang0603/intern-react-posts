@@ -13,7 +13,6 @@ class List extends Component {
         };
     }
 
-
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.posts !== prevProps.posts) {
             this.setState({
@@ -29,7 +28,6 @@ class List extends Component {
             return filter.filterActive === 'all' ? item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) :
                 item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) && item.active === active
         });
-
         this.setState({filteredPost: updatedList, version: this.state.version + 1});
     };
     resetTable() {
@@ -43,18 +41,19 @@ class List extends Component {
                 <div className="listTopics">
                     <h2 className="mainTitle text-center">List Topics</h2>
                     <PostFilter filterPost={this.filterPost.bind(this)} resetTable={this.resetTable.bind(this)} />
-                    <PostTable posts={this.state.filteredPost} deleteNotification={this.props.deleteNotification.bind(this)}/>
+                    <PostTable posts={this.state.filteredPost} deleteNotification={this.props.deleteNotification.bind(this)} fetching={this.props.fetching} error={this.props.error}/>
                 </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    let posts = state.postTableReducer.posts;
+const mapStateToProps = state => {
     return {
-        posts: posts,
-    }
+        fetching: state.postTableReducer.fetching,
+        posts: state.postTableReducer.posts,
+        error: state.postTableReducer.error
+    };
 };
 
 List.propTypes = {

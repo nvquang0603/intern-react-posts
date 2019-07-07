@@ -19,17 +19,14 @@ class PostTable extends Component {
     }
     handleEdit(post) {
         this.props.editPost(post);
-    }
+    };
 
     componentDidMount() {
-        axios.get(`http://5d20186c3036a60014d68a1d.mockapi.io/posts`)
-            .then(res => {
-                let posts = res.data;
-                this.props.listPost(posts);
-            })
-            .catch(error => console.log(error));
-    }
+        this.props.fetchProducts();
+    };
+
     render() {
+        const { fetching, posts, fetchProducts, error } = this.props;
         return (
             <table className="table table-dark table-hover">
                 <thead className={"text-center"}>
@@ -41,27 +38,31 @@ class PostTable extends Component {
                     <th>Actions</th>
                 </tr>
                 </thead>
+
                 <tbody>
-                {
-                    this.props.posts.map(post => {
-                        return (
-                            <tr key={post.id}>
-                                <td className={"text-center"}>{post.id}</td>
-                                <td>{post.title}</td>
-                                <td className={"text-center"}>{post.author}</td>
-                                <td className={"text-center"}>
-                                    {post.active === true ? <i className="fas fa-check text-success"/> : <i className="fas fa-ban text-danger" />}
-                                </td>
-                                <td className={"text-center"}>
-                                    <div className="form-group">
-                                        <Link to={`/${post.id}/edit`} className="btn btn-warning btn-sm font-weight-bold" onClick={this.handleEdit.bind(this, post)}>Edit</Link>
-                                        <button className="btn btn-danger btn-sm ml-2 font-weight-bold" onClick={this.handleDelete.bind(this, post)}>Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        )
-                    })
+                { fetching ? <tr><td colSpan={5} className={"text-center text-warning p-5"}>Đang tải dữ liệu bài viết. Vui lòng chờ trong giây lát</td></tr> :
+                    posts.length === 0 ?
+                        <tr><td colSpan={5} className={"text-center text-white p-5"}>Không có bài viết nào để hiển thị</td></tr>:
+                        posts.map(post => {
+                            return (
+                                <tr key={post.id}>
+                                    <td className={"text-center"}>{post.id}</td>
+                                    <td>{post.title}</td>
+                                    <td className={"text-center"}>{post.author}</td>
+                                    <td className={"text-center"}>
+                                        {post.active === true ? <i className="fas fa-check text-success"/> : <i className="fas fa-ban text-danger" />}
+                                    </td>
+                                    <td className={"text-center"}>
+                                        <div className="form-group">
+                                            <Link to={`/${post.id}/edit`} className="btn btn-warning btn-sm font-weight-bold" onClick={this.handleEdit.bind(this, post)}>Edit</Link>
+                                            <button className="btn btn-danger btn-sm ml-2 font-weight-bold" onClick={this.handleDelete.bind(this, post)}>Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })
                 }
+                {error && <tr><td colSpan={5} className={"text-center text-warning p-5"}>Có lỗi xảy ra</td></tr>}
                 </tbody>
             </table>
         )
@@ -70,8 +71,8 @@ class PostTable extends Component {
 
 const mapDispatchToProps  = (dispatch, props) => {
     return {
-        listPost: (posts) => {
-            dispatch(actions.listPost(posts))
+        fetchProducts: () => {
+            dispatch({ type: "API_CALL_REQUEST" })
         },
         deletePost: (post) => {
             dispatch(actions.deletePost(post))
