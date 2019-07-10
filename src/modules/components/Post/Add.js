@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import List from "./List";
 import {Switch} from 'antd';
 import 'antd/dist/antd.css';
-import * as actions from "../../actions";
 import {connect} from "react-redux";
 
 class AddPost extends Component {
@@ -18,26 +16,71 @@ class AddPost extends Component {
                 author: '',
                 active: false,
             },
-            errors: {}
+            errors: {
+                title: {
+                    dangerBorder: '',
+                    message: ''
+                },
+                content: {
+                    dangerBorder: '',
+                    message: ''
+                },
+                author: {
+                    dangerBorder: '',
+                    message: ''
+                }
+            }
         };
         this.notificationDOMRef = React.createRef();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.post !== prevProps.post) {
+            this.setState({
+                id: this.props.post.id,
+                title: this.props.post.title,
+                content: this.props.post.content,
+                author: this.props.post.author,
+                active: this.props.post.active,
+            });
+        }
+    };
+
+    componentDidMount() {
+        this.props.addPost(this.props.match.params.id);
+    }
+
     validation = () => {
         let datas = this.state.data;
-        let error = {};
+        let error = {
+            title: {
+                dangerBorder: false,
+                message: ''
+            },
+            content: {
+                dangerBorder: false,
+                message: ''
+            },
+            author: {
+                dangerBorder: false,
+                message: ''
+            }
+        };
         let validation = true;
         if (!datas['title'] || datas['title'] === "") {
             validation = false;
-            error['title'] = "Title is required!"
+            error.title.dangerBorder = true;
+            error['title.message'] = "Title is required!"
         }
-        if (!datas['title'] || datas['content'] === "") {
+        if (!datas['content'] || datas['content'] === "") {
             validation = false;
-            error['content'] = "Content is required!"
+            error.content.dangerBorder = true;
+            error['content.message'] = "Content is required!"
         }
         if (!datas['title'] || datas['author'] === "") {
             validation = false;
-            error['author'] = "Author is required!"
+            error.author.dangerBorder = true;
+            error['author.message'] = "Author is required!"
         }
         this.setState({errors: error});
         return validation;
@@ -68,8 +111,7 @@ class AddPost extends Component {
 
     onSubmit = (event) => {
         if (this.validation()) {
-            this.props.addPost(this.state.data);
-            this.props.history.push('/list');
+            this.props.addPost(this.state.data, this.props.history);
         }
     };
 
@@ -79,6 +121,7 @@ class AddPost extends Component {
     };
 
     render() {
+        let {errors} = this.state;
         return (
             <div>
                 <div className="jumbotron">
@@ -91,7 +134,7 @@ class AddPost extends Component {
                                 </div>
                                 <input type="text"
                                        placeholder="Title"
-                                       className="form-control"
+                                       className={errors.title.dangerBorder === true ? "form-control border-danger" : "form-control"}
                                        defaultValue=""
                                        value={this.state.title}
                                        onChange={this.onHandleChange.bind(this, "title")}
@@ -99,7 +142,7 @@ class AddPost extends Component {
                                        name={"title"}
                                 />
                             </div>
-                            <span style={{color: "red"}}>{this.state.errors["title"]}</span>
+                            <span style={{color: "red"}}>{this.state.errors["title.message"]}</span>
                         </div>
                         <div className="col-12">
                             <div className="input-group mb-3 ">
@@ -111,12 +154,13 @@ class AddPost extends Component {
                                           placeholder="Content"
                                           defaultValue=""
                                           onChange={this.onHandleChange.bind(this, "content")}
-                                          className="form-control" id="content"
+                                          className={errors.content.dangerBorder === true ? "form-control border-danger" : "form-control"}
+                                          id="content"
                                 />
                                 <span
                                     className="glyphicon glyphicon-filter"/>
                             </div>
-                            <span style={{color: "red"}}>{this.state.errors["content"]}</span>
+                            <span style={{color: "red"}}>{this.state.errors["content.message"]}</span>
                         </div>
                         <div className="col-6">
                             <div className="input-group mb-3">
@@ -127,15 +171,16 @@ class AddPost extends Component {
                                        placeholder="Author"
                                        defaultValue=""
                                        onChange={this.onHandleChange.bind(this, "author")}
-                                       className="form-control" id="author"
+                                       className={errors.author.dangerBorder === true ? "form-control border-danger" : "form-control"}
+                                       id="author"
                                 />
                                 <span
                                     className="glyphicon glyphicon-filter"/>
                             </div>
-                            <span style={{color: "red"}}>{this.state.errors["author"]}</span>
+                            <span style={{color: "red"}}>{this.state.errors["author.message"]}</span>
                         </div>
                         <div className="col-6">
-                            <label style={{fontSize: '15px', fontWeight:'bold' }}>Active status:</label>
+                            <label style={{fontSize: '15px', fontWeight: 'bold'}}>Active status:</label>
                             <Switch
                                 onChange={this.onHandleChangeSwitch.bind(this, "active")}/>
                         </div>
@@ -143,7 +188,7 @@ class AddPost extends Component {
                     </form>
                     <div className="button-group text-center">
                         <button
-                            onClick={this.onSubmit}
+                            onClick={this.onSubmit.bind(this)}
                             className="btn btn-success btnadd">
                             <i className="fas fa-plus" style={{fontSize: '18px'}}/> Add
                         </button>
@@ -160,7 +205,8 @@ class AddPost extends Component {
         );
     }
 }
-const mapStateToProps = (state) => {
+
+const mapStateToProps = state => {
     let posts = state.postTableReducer.posts;
     let post = state.postTableReducer.post;
     return {
@@ -168,13 +214,15 @@ const mapStateToProps = (state) => {
         post: post
     }
 };
-const mapDispatchToProps  = (dispatch, props) => {
+
+const mapDispatchToProps = (dispatch, props) => {
     return {
-        addPost: (post) => {
-            dispatch(actions.addPost(post))
+        addPost: (post, history) => {
+            dispatch({type: "API_CALL_ADD_REQUEST", payload: {post, history}})
         }
     }
 };
+
 AddPost.propTypes = {
     listPosts: PropTypes.array,
     onSetPost: PropTypes.func,
@@ -182,7 +230,8 @@ AddPost.propTypes = {
 
 AddPost.defaultProps = {
     listPosts: [],
-    onSetPost: () => {},
+    onSetPost: () => {
+    },
 };
 export default withRouter(connect(
     mapStateToProps,

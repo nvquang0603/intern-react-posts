@@ -68,8 +68,7 @@ class App extends Component {
                                     <List deleteNotification={this.deleteNotification.bind(this)}/>}
                                 />
                                 <Route path="/add"
-                                       component={() => <Add onSetPost={this.onSetPost}
-                                                             listPosts={this.state.posts}/>}/>
+                                       component={() => <Add/>}/>
                                 <Route path="/:id/edit" component={() => <Edit editNotification={this.editNotification.bind(this)}/>}/>
                             </Switch>
 
