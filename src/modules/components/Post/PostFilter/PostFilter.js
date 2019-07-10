@@ -14,6 +14,7 @@ class PostFilter extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.posts !== prevProps.posts) {
             this.setState({
@@ -23,6 +24,7 @@ class PostFilter extends Component {
             });
         }
     }
+
     handleChange = (event) => {
         let target = event.target;
         let name = target.name;
@@ -105,28 +107,11 @@ class PostFilter extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    let posts = state.postTableReducer.posts;
-    return {
-        posts
-    }
-};
-
-const mapDispatchToProps  = (dispatch, props) => {
-    return {
-        listPost: (posts) => {
-            dispatch(actions.listPost(posts))
-        }
-    }
-};
-
 PostFilter.propTypes = {
     filterPost: PropTypes.func,
     resetTable: PropTypes.func
 };
+export default PostFilter
 
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PostFilter);
+

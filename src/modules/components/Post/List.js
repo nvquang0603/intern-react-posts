@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import PostFilter from './PostFilter/PostFilter';
-import PostTable from './PostTable/PostTable';
+import PostFilter from '../../containers/postFilter';
+import PostTable from '../../containers/postTable';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
@@ -28,35 +28,28 @@ class List extends Component {
             return filter.filterActive === 'all' ? item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) :
                 item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) && item.active === active
         });
+
         this.setState({filteredPost: updatedList, version: this.state.version + 1});
     };
+
     resetTable() {
         this.setState({
             filteredPost: this.props.posts
         });
     };
+
     render() {
         return (
             <div>
                 <div className="listTopics">
                     <h2 className="mainTitle text-center">List Topics</h2>
                     <PostFilter filterPost={this.filterPost.bind(this)} resetTable={this.resetTable.bind(this)} />
-                    <PostTable posts={this.state.filteredPost} deleteNotification={this.props.deleteNotification.bind(this)} fetching={this.props.fetching} deleted={this.props.deleted} error={this.props.error} deleting={this.props.deleting}/>
+                    <PostTable posts={this.state.filteredPost} fetching={this.props.fetching}/>
                 </div>
             </div>
         );
     }
 }
-
-const mapStateToProps = state => {
-    return {
-        deleting: state.postTableReducer.deleting,
-        deleted: state.postTableReducer.deleted,
-        fetching: state.postTableReducer.fetching,
-        posts: state.postTableReducer.posts,
-        error: state.postTableReducer.error
-    };
-};
 
 List.propTypes = {
     version: PropTypes.number,
@@ -65,7 +58,4 @@ List.propTypes = {
 List.defaultProps = {
     version: 1,
 };
-export default connect(
-    mapStateToProps,
-    null
-)(List);
+export default List;

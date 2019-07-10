@@ -46,7 +46,16 @@ button{
 .ant-switch{
     margin-left: 5px !important;
 }
-
+.banner {
+    background-image: url("./resources/images/775217.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 170px;
+    width: 100%;
+}
 .active {
     background-color: #2E2C2C;
     color: black;
