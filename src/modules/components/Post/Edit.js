@@ -27,10 +27,12 @@ class Edit extends Component {
                 }
             }
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
-    }
+    };
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.post !== prevProps.post) {
             this.setState({
@@ -42,9 +44,10 @@ class Edit extends Component {
             });
         }
     };
+
     componentDidMount() {
         this.props.editPost(this.props.match.params.id);
-    }
+    };
 
     handleValidation = () => {
         let error = {
@@ -80,6 +83,7 @@ class Edit extends Component {
         this.setState({errors: error});
         return isInputValid;
     };
+
     handleChange = (event) => {
         let target = event.target;
         let name = target.name;

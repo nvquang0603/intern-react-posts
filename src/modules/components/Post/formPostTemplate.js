@@ -19,8 +19,8 @@ class FormPost extends Component {
                                 className={errors.title.dangerBorder === true ? "form-control border-danger" : "form-control"}
                                 id={"title"}
                                 name={"title"}
-                                onChange={this.handleChange}
-                                onBlur={this.handleValidation}
+                                onChange={this.props.handleChange}
+                                onBlur={this.props.handleValidation}
                                 value={state.title}
                             />
                         </div>
@@ -37,8 +37,8 @@ class FormPost extends Component {
                                 rows={"10"}
                                 className={errors.content.dangerBorder === true ? "form-control border-danger" : "form-control"}
                                 name={"content"}
-                                onChange={this.handleChange}
-                                onBlur={this.handleValidation}
+                                onChange={this.props.handleChange}
+                                onBlur={this.props.handleValidation}
                                 value={state.content}
                             />
                         </div>
@@ -56,8 +56,8 @@ class FormPost extends Component {
                                 className={errors.author.dangerBorder === true ? "form-control border-danger" : "form-control"}
                                 id={"author"}
                                 name={"author"}
-                                onChange={this.handleChange}
-                                onBlur={this.handleValidation}
+                                onChange={this.props.handleChange}
+                                onBlur={this.props.handleValidation}
                                 value={state.author}
                             />
                         </div>
@@ -70,7 +70,7 @@ class FormPost extends Component {
                         <label className={"form-check-label"}>Active status &nbsp;</label>
                         <Switch
                             checked={state.active}
-                            onChange={this.onHandleChangeSwitch.bind(this, "active")}/>
+                            onChange={this.props.onHandleChangeSwitch.bind(this, "active")}/>
                     </div>
 
                     <hr/>
@@ -79,7 +79,7 @@ class FormPost extends Component {
                         <button
                             type={"submit"}
                             className={errors.title.message !== '' || errors.content.message !== '' || errors.author.message !== '' ? "btn btn-success mr-2 disabled" : "btn btn-success mr-2"}
-                            onClick={this.handleSubmit.bind(this)}
+                            onClick={this.props.handleSubmit.bind(this)}
                         >
                             <i className={"far fa-paper-plane"} style={{fontSize: '18px'}}/>&nbsp;
                             Submit
@@ -87,7 +87,7 @@ class FormPost extends Component {
                         <button
                             type={"submit"}
                             className={"btn btn-danger"}
-                            onClick={this.handleReset}
+                            onClick={this.props.handleReset}
                         >
                             <i className={"fas fa-eraser"} style={{fontSize: '18px'}}/>&nbsp;
                             Reset
@@ -97,6 +97,5 @@ class FormPost extends Component {
             </div>
         )
     }
-
 }
 export default FormPost;
