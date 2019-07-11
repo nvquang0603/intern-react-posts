@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import * as actions from "../../../actions";
+import {connect} from "react-redux";
 
-class Filter extends Component {
+class PostFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,6 +13,16 @@ class Filter extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.posts !== prevProps.posts) {
+            this.setState({
+                filterTitle: '',
+                filterAuthor: '',
+                filterActive: 'all'
+            });
+        }
     }
 
     handleChange = (event) => {
@@ -23,7 +35,7 @@ class Filter extends Component {
     };
 
     handleSubmit = (event) => {
-        this.props.filterUser({...this.state});
+        this.props.filterPost({...this.state});
     };
 
     handleReset = (event) => {
@@ -94,12 +106,12 @@ class Filter extends Component {
         );
     }
 }
-Filter.propTypes = {
-    filterUser: PropTypes.func,
+
+PostFilter.propTypes = {
+    filterPost: PropTypes.func,
     resetTable: PropTypes.func
 };
-Filter.defaultProps = {
-    filterUser: () => {},
-    resetTable: () => {}
-};
-export default Filter;
+export default PostFilter
+
+
+
