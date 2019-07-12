@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import { connect } from "react-redux";
+import {toastr} from 'react-redux-toastr'
 import PropTypes from 'prop-types';
+import ActiveMark from "../../../../common/ActiveMark";
 
 
 class PostTable extends Component {
     handleDelete(post) {
-        let confirmDelete = window.confirm('Are you sure? Press Enter or click Ok to delete');
-        if ( confirmDelete ) {
-            this.props.deletePost(post);
-            if(this.props.fetching === false)  {
-                this.props.deleteNotification(post.id);
-            }
-        }
+        const toastrConfirmOptions = {
+            onOk: () => this.props.deletePost(post)
+        };
+        toastr.confirm('Are you sure about that!?', toastrConfirmOptions);
     }
 
     componentDidMount() {
@@ -25,8 +24,8 @@ class PostTable extends Component {
             <table className="table table-dark table-hover">
                 <thead className={"text-center"}>
                 <tr>
-                    <th>ID</th>
-                    <th>Title</th>
+                    <th width={"10px"}>ID</th>
+                    <th width={"50%"}>Title</th>
                     <th>Author</th>
                     <th>Active</th>
                     <th>Actions</th>
@@ -36,7 +35,7 @@ class PostTable extends Component {
                 <tbody>
                 { fetching ? <tr><td colSpan={5} className={"text-center text-warning p-5"}>Đang tải dữ liệu bài viết. Vui lòng chờ trong giây lát</td></tr> :
                     posts.length === 0 ?
-                        <tr><td colSpan={5} className={"text-center text-white p-5"}>Không có bài viết nào để hiển thị</td></tr>:
+                        <tr><td colSpan={5} className={"text-center text-white p-5"}>Không có bài viết nào</td></tr>:
                         posts.map(post => {
                             return (
                                 <tr key={post.id}>
@@ -44,7 +43,7 @@ class PostTable extends Component {
                                     <td>{post.title}</td>
                                     <td className={"text-center"}>{post.author}</td>
                                     <td className={"text-center"}>
-                                        {post.active === true ? <i className="fas fa-check text-success"/> : <i className="fas fa-ban text-danger" />}
+                                        {post.active}
                                     </td>
                                     <td className={"text-center"}>
                                         <div className="form-group">
@@ -62,24 +61,6 @@ class PostTable extends Component {
         )
     }
 }
-const mapStateToProps = state => {
-    return {
-        deleting: state.postTableReducer.deleting,
-    };
-};
-const mapDispatchToProps  = (dispatch, props) => {
-    return {
-        fetchPost: () => {
-            dispatch({ type: "API_CALL_REQUEST" })
-        },
-        deletePost: (post) => {
-            dispatch({ type: "API_CALL_DELETE_REQUEST", post })
-        },
-        editPost: (post) => {
-            dispatch({ type: "API_CALL_EDIT_REQUEST", post })
-        }
-    }
-};
 
 PostTable.propTypes = {
     posts: PropTypes.array,
@@ -87,7 +68,4 @@ PostTable.propTypes = {
     onDelete: PropTypes.func
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PostTable);
+export default PostTable;

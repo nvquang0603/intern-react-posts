@@ -1,6 +1,5 @@
 import * as types from './../../common/Constant';
 
-
 let initialState = {
     posts: [],
     post: {
@@ -58,6 +57,7 @@ let postTableReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fetching: false,
+                deleting: true,
                 error: null
             };
         case types.API_CALL_DELETE_SUCCESS:
@@ -68,12 +68,15 @@ let postTableReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fetching: false,
+                deleting: false,
+                error: null,
                 posts: items
             };
         case types.API_CALL_DELETE_FAILURE:
             return {
                 ...state,
                 fetching: false,
+                deleting: false,
                 error: action.error
             };
         case types.API_CALL_EDIT_REQUEST:

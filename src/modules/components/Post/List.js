@@ -28,26 +28,23 @@ class List extends Component {
             return filter.filterActive === 'all' ? item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) :
                 item.title.toLowerCase().includes(filter.filterTitle.toLowerCase()) && item.author.toLowerCase().includes(filter.filterAuthor.toLowerCase()) && item.active === active
         });
+
         this.setState({filteredPost: updatedList, version: this.state.version + 1});
     };
+
     resetTable() {
         this.setState({
             filteredPost: this.props.posts
         });
     };
+
     render() {
         return (
             <div>
                 <div className="listTopics">
                     <h2 className="mainTitle text-center">List Topics</h2>
-                    <PostFilter filterPost={this.filterPost.bind(this)}
-                                resetTable={this.resetTable.bind(this)} />
-                    <PostTable posts={this.state.filteredPost}
-                               deleteNotification={this.props.deleteNotification.bind(this)}
-                               fetching={this.props.fetching}
-                               deleted={this.props.deleted}
-                               error={this.props.error}
-                               deleting={this.props.deleting}/>
+                    <PostFilter filterPost={this.filterPost.bind(this)} resetTable={this.resetTable.bind(this)} />
+                    <PostTable posts={this.state.filteredPost} fetching={this.props.fetching}/>
                 </div>
             </div>
         );

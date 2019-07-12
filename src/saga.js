@@ -1,6 +1,8 @@
-import { takeLatest, call, put } from "redux-saga/effects";
+import { takeLatest, call, put, delay } from "redux-saga/effects";
 import axios from "axios";
-import {toastr} from 'react-redux-toastr';
+import {toastr} from 'react-redux-toastr'
+import Constant from "./common/Constant";
+
 
 export function* watcherSaga() {
     yield takeLatest("API_CALL_REQUEST", workerSaga);
@@ -64,8 +66,7 @@ function saveEditPost(action) {
 function deletePost(action) {
     return axios({
         method: "DELETE",
-        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.post.id}`,
-        data: action.post
+        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.post.id}`
     });
 }
 
@@ -74,7 +75,6 @@ function* workerSaga() {
         const response = yield call(fetchPost);
         const data = response.data;
         yield put({ type: "API_CALL_SUCCESS", data });
-
     } catch (error) {
         yield put({ type: "API_CALL_FAILURE", error });
     }
@@ -95,9 +95,10 @@ function* deleteSaga(action) {
         const response = yield call(deletePost, action);
         const data = response.data;
         yield put({ type: "API_CALL_DELETE_SUCCESS", data });
-
+        yield toastr.success('Finish', 'Post #' + action.post.id + ' has been deleted')
     } catch (error) {
         yield put({ type: "API_CALL_DELETE_FAILURE", error });
+        yield toastr.error('An error has been occurred')
     }
 }
 
@@ -113,12 +114,17 @@ function* editSaga(action) {
 }
 
 function* saveEditSaga(action) {
-    console.log(action);
     try {
-        const response = yield call(saveEditPost, action);
+        const response = yield call(saveEditPost, action.payload);
         const post = response.data;
+        const {history} = action.payload;
         yield put({ type: "API_CALL_SAVE_EDIT_SUCCESS", post });
+        yield history.push('/list');
+        yield delay(1000);
+        yield toastr.success('Finish', 'Post #' + action.payload.post.id + ' has been updated')
+
     } catch (error) {
         yield put({ type: "API_CALL_EDIT_SAVE_FAILURE", error });
+        yield toastr.error('An error has been occurred')
     }
 }
