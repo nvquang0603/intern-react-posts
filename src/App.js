@@ -7,6 +7,7 @@ import Add from "./modules/components/Post/Add.js";
 import Edit from "./modules/containers/editPost";
 import Home from "./modules/components/Home";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import ActiveMark from "./common/ActiveMark";
 
 class App extends Component {
 

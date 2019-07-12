@@ -1,8 +1,10 @@
 import {connect} from "react-redux";
 import PostTable from '../components/Post/PostTable/PostTable';
+import {showActive} from "../selectors";
 
 const mapStateToProps = state => {
     return {
+        posts: showActive(state.postTableReducer),
         fetching: state.postTableReducer.fetching,
         error: state.postTableReducer.error
     };
