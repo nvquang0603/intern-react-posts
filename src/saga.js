@@ -41,8 +41,7 @@ function saveEditPost(action) {
 function deletePost(action) {
     return axios({
         method: "DELETE",
-        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.payload.post.id}`,
-        data: action.post
+        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.post.id}`
     });
 }
 
