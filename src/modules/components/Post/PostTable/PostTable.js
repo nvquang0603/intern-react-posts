@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import { connect } from "react-redux";
 import {toastr} from 'react-redux-toastr'
 import PropTypes from 'prop-types';
+import ActiveMark from "../../../../common/ActiveMark";
 
 
 class PostTable extends Component {
@@ -42,7 +43,7 @@ class PostTable extends Component {
                                     <td>{post.title}</td>
                                     <td className={"text-center"}>{post.author}</td>
                                     <td className={"text-center"}>
-                                        {post.active === true ? <i className="fas fa-check text-success"/> : <i className="fas fa-ban text-danger" />}
+                                        {post.active}
                                     </td>
                                     <td className={"text-center"}>
                                         <div className="form-group">

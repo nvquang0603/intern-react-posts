@@ -41,7 +41,7 @@ function saveEditPost(action) {
 function deletePost(action) {
     return axios({
         method: "DELETE",
-        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.post.id}`,
+        url: `http://5d20186c3036a60014d68a1d.mockapi.io/posts/${action.payload.post.id}`,
         data: action.post
     });
 }
@@ -66,7 +66,6 @@ function* deleteSaga(action) {
     } catch (error) {
         yield put({ type: "API_CALL_DELETE_FAILURE", error });
         yield toastr.error('An error has been occurred')
-
     }
 }
 
