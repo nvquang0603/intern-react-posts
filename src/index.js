@@ -8,7 +8,7 @@ import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import rootReducer from './reducers';
 import ReduxToastr from 'react-redux-toastr'
-import { watcherSaga } from "./saga";
+import {sagaWatcher} from "./sagaWatcher";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -17,7 +17,7 @@ const store = createStore(
     applyMiddleware(sagaMiddleware)
 );
 
-sagaMiddleware.run(watcherSaga);
+sagaMiddleware.run(sagaWatcher);
 
 ReactDOM.render(
     <Provider store={store}>

@@ -45,7 +45,7 @@ let postTableReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fetching: false,
-                posts: {...action.payload.data}
+                posts: [{...action.payload.data}]
             };
         case types.API_CALL_ADD_FAILURE:
             return {

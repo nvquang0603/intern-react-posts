@@ -26,8 +26,6 @@ class App extends Component {
         this.successAddNotification();
     };
 
-    };
-
     render() {
         return (
             <div className="App">
@@ -48,8 +46,7 @@ class App extends Component {
                                     <List />}
                                 />
                                 <Route path="/add"
-                                       component={() => <Add onSetPost={this.onSetPost}
-                                                             listPosts={this.state.posts}/>}/>
+                                       component={() => <Add/>}/>
                                 <Route path="/:id/edit" component={() => <Edit />}/>
                                        component={() => <Add/>}/>
                             </Switch>

@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import PostFilter from './PostFilter/PostFilter';
-import PostTable from './PostTable/PostTable';
+import PostFilter from '../../containers/postFilter';
+import PostTable from '../../containers/postTable';
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
 
 class List extends Component {
     constructor(props) {
@@ -20,7 +19,6 @@ class List extends Component {
             });
         }
     };
-
     filterPost = (filter) => {
         let active = (filter.filterActive === 'true');
         let {posts} = this.props;
@@ -51,15 +49,6 @@ class List extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        deleting: state.postTableReducer.deleting,
-        deleted: state.postTableReducer.deleted,
-        fetching: state.postTableReducer.fetching,
-        posts: state.postTableReducer.posts,
-        error: state.postTableReducer.error
-    };
-};
 
 List.propTypes = {
     version: PropTypes.number,
@@ -68,7 +57,4 @@ List.propTypes = {
 List.defaultProps = {
     version: 1,
 };
-export default connect(
-    mapStateToProps,
-    null
-)(List);
+export default List;

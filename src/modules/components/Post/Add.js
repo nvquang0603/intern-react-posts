@@ -207,10 +207,8 @@ class AddPost extends Component {
 }
 
 const mapStateToProps = state => {
-    let posts = state.postTableReducer.posts;
     let post = state.postTableReducer.post;
     return {
-        posts: posts,
         post: post
     }
 };
