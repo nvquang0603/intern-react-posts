@@ -29,31 +29,30 @@ let postTableReducer = (state = initialState, action) => {
                 posts: action.data
             };
         case types.API_CALL_FAILURE:
-            return { ...state,
+            return {
+                ...state,
                 fetching: false,
-                error: action.error };
+                error: action.error
+            };
 
-        // case types.ADD_POST:
-        //     return {
-        //         posts: [
-        //             {
-        //                 title: action.post.title,
-        //                 content: action.post.content,
-        //                 author: action.post.author,
-        //                 active: action.post.active
-        //             },
-        //             ...state.posts
-        //         ],
-        //         post:
-        //             {
-        //                 id: 0,
-        //                 title: '',
-        //                 content: '',
-        //                 author: '',
-        //                 active: false
-        //             }
-        //     };
+        case types.API_CALL_ADD_REQUEST:
+            return {
+                ...state,
+                fetching: false,
+            };
 
+        case types.API_CALL_ADD_SUCCESS:
+            return {
+                ...state,
+                fetching: false,
+                posts: [{...action.payload.data}]
+            };
+        case types.API_CALL_ADD_FAILURE:
+            return {
+                ...state,
+                fetching: false,
+                error: action.error
+            };
         case types.API_CALL_DELETE_REQUEST:
             return {
                 ...state,
@@ -107,7 +106,7 @@ let postTableReducer = (state = initialState, action) => {
         case types.API_CALL_SAVE_EDIT_SUCCESS:
             let editPosts = state.posts;
             let newItem = editPosts.map(item => {
-                if (action.post.id === item.id){
+                if (action.post.id === item.id) {
                     item.title = action.post.title;
                     item.content = action.post.content;
                     item.author = action.post.author;
@@ -126,10 +125,11 @@ let postTableReducer = (state = initialState, action) => {
                 error: action.error,
                 fetching: false,
             };
-        default: return {
-            ...state,
-            posts: state.posts
-        };
+        default:
+            return {
+                ...state,
+                posts: state.posts
+            };
     }
 };
 export default postTableReducer;

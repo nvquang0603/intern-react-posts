@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PostFilter from '../../containers/postFilter';
 import PostTable from '../../containers/postTable';
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
 
 class List extends Component {
     constructor(props) {
@@ -20,7 +19,6 @@ class List extends Component {
             });
         }
     };
-
     filterPost = (filter) => {
         let active = (filter.filterActive === 'true');
         let {posts} = this.props;
@@ -50,6 +48,7 @@ class List extends Component {
         );
     }
 }
+
 
 List.propTypes = {
     version: PropTypes.number,

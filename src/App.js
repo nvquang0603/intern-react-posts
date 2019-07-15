@@ -18,13 +18,12 @@ class App extends Component {
             document.getElementById("mySidenav").style.width = "0px";
         }
     };
-
     onSetPost = (data) => {
         this.setState({
             posts: data,
             filteredPost: data
         });
-
+        this.successAddNotification();
     };
 
     render() {
@@ -47,9 +46,9 @@ class App extends Component {
                                     <List />}
                                 />
                                 <Route path="/add"
-                                       component={() => <Add onSetPost={this.onSetPost}
-                                                             listPosts={this.state.posts}/>}/>
+                                       component={() => <Add/>}/>
                                 <Route path="/:id/edit" component={() => <Edit />}/>
+                                       component={() => <Add/>}/>
                             </Switch>
                         </div>
                     </BrowserRouter>

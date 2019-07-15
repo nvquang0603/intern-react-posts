@@ -46,15 +46,9 @@ button{
 .ant-switch{
     margin-left: 5px !important;
 }
-.banner {
-    background-image: url("./resources/images/775217.jpg");
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 170px;
+.carousel-item>img{
     width: 100%;
+    height: 400px;
 }
 .active {
     background-color: #2E2C2C;

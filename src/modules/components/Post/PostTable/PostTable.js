@@ -19,6 +19,7 @@ class PostTable extends Component {
     };
 
     render() {
+
         const { fetching, posts, fetchProducts, error } = this.props;
         return (
             <table className="table table-dark table-hover">
@@ -43,7 +44,7 @@ class PostTable extends Component {
                                     <td>{post.title}</td>
                                     <td className={"text-center"}>{post.author}</td>
                                     <td className={"text-center"}>
-                                        {post.active}
+                                        {post.showActive}
                                     </td>
                                     <td className={"text-center"}>
                                         <div className="form-group">

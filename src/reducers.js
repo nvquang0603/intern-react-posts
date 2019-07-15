@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import {combineReducers} from "redux";
 import postTableReducer from './modules/reducers/postTable';
 import {reducer as toastrReducer} from 'react-redux-toastr'
 
